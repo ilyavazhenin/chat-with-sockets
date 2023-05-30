@@ -29,7 +29,6 @@ const LoginForm = () => {
       alert(JSON.stringify(values, null, 2));
     },
   });
-
   return (
     <Form onSubmit={formik.handleSubmit}>
       <Form.Group className="mb-3" controlId="formNickname">
