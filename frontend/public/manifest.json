@@ -1,0 +1,6 @@
+{
+  "short_name": "Slack-alike chat",
+  "name": "A websockets based Slack-alike chat",
+  "start_url": ".",
+  "display": "standalone"
+}

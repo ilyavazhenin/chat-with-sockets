@@ -2,8 +2,18 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useFormik } from 'formik';
 import * as Yup from "yup";
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { useContext, useEffect, useState } from 'react';
+import CurrentUserContext from '../../../utils/auth-context';
+
+// вынести в утилс и возможно сделать через юзэффект
 
 const LoginForm = () => {
+
+  const { user, setUser } = useContext(CurrentUserContext);
+  const navigate = useNavigate();
+
   const formik = useFormik({
     initialValues: {
       nickname: '',
@@ -15,14 +25,41 @@ const LoginForm = () => {
         .max(15, "Никнейм должен быть не длиннее 15 символов")
         .required("Обязательно к заполнению"),
       password: Yup.string()
-        .min(6, "Пароль должен состоять минимум из 6 символов")
+        .min(5, "Пароль должен состоять минимум из 5 символов")
         .max(20, "Никнейм должен быть не длиннее 20 символов")
         .required("Обязательно к заполнению"),
     }),
-    onSubmit: values => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: async (values) => {
+      // вынести потом в отдельную функцию в утилс:
+      try {
+        const response = await axios.post('/api/v1/login', { 
+          username: formik.values.nickname,
+          password: formik.values.password,
+        } );
+        // если ответ 200, переписать с условием:
+        console.log(JSON.stringify(values, null, 2));
+        console.log(response, 'response');
+        console.log(response.data, 'resp data');
+        localStorage.setItem('token', response.data.token)
+        localStorage.setItem('userName', formik.values.nickname)
+  
+        if (response.status === 200) {
+          setUser({userName: localStorage.getItem('userName')});
+          navigate('/');
+        }
+      } catch (e) {
+        setUser(null);
+        console.log('auth problem, mb no such user or network problem?');
+      } 
     },
   });
+
+  
+
+  // useEffect(() => {
+  //   redirectOnAuth();
+  // });
+
   return (
     <Form onSubmit={formik.handleSubmit}>
       <Form.Group className="mb-3" controlId="formNickname">

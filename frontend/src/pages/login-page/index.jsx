@@ -3,16 +3,16 @@ import LoginForm from './components/LoginForm';
 
 const LoginCard = () => {
   return (
-    <div class="my-2 d-flex justify-content-center bg-light">
-      <div class="row align-items-start">
-        <div class="col">
+    <div className="my-2 d-flex justify-content-center bg-light">
+      <div className="row align-items-start">
+        <div className="col">
           <Card>
             <Card.Body>
-              <div class="row">
-                <div class="col">
+              <div className="row">
+                <div className="col">
                   <Card.Img variant="top" src="assets/chat-box.png" />
                 </div>
-                <div class="col">
+                <div className="col">
                   <Card.Title>
                     <h2>Войти</h2>
                   </Card.Title>
