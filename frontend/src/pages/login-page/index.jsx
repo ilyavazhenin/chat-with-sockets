@@ -3,8 +3,8 @@ import LoginForm from './components/LoginForm';
 
 const LoginCard = () => {
   return (
-    <div className="my-2 d-flex justify-content-center bg-light">
-      <div className="row align-items-start">
+    <div className="d-flex justify-content-center align-items-center min-vh-100 bg-light">
+      <div className="row" style={{ maxWidth: "590px" }}>
         <div className="col">
           <Card>
             <Card.Body>
@@ -12,7 +12,7 @@ const LoginCard = () => {
                 <div className="col">
                   <Card.Img variant="top" src="assets/chat-box.png" />
                 </div>
-                <div className="col">
+                <div className="col w-100">
                   <Card.Title>
                     <h2>Войти</h2>
                   </Card.Title>
