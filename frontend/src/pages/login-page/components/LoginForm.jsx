@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import CurrentUserContext from '../../../utils/auth-context';
 
-// вынести в утилс и возможно сделать через юзэффект
+//TODO: вынести в утилс и возможно сделать через юзэффект
 
 const LoginForm = () => {
 
@@ -30,18 +30,18 @@ const LoginForm = () => {
         .required("Обязательно к заполнению"),
     }),
     onSubmit: async (values) => {
-      // вынести потом в отдельную функцию в утилс:
+      //TODO: вынести потом в отдельную функцию в утилс:
       try {
         const response = await axios.post('/api/v1/login', { 
           username: formik.values.nickname,
           password: formik.values.password,
         } );
-        // если ответ 200, переписать с условием:
+        //TODO: почистить консольлоги
         console.log(JSON.stringify(values, null, 2));
         console.log(response, 'response');
         console.log(response.data, 'resp data');
-        localStorage.setItem('token', response.data.token)
-        localStorage.setItem('userName', formik.values.nickname)
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('userName', formik.values.nickname);
   
         if (response.status === 200) {
           setUser({userName: localStorage.getItem('userName')});
@@ -49,7 +49,11 @@ const LoginForm = () => {
         }
       } catch (e) {
         setUser(null);
-        console.log('auth problem, mb no such user or network problem?');
+        console.log(e, 'E')
+        const errors = {};
+        if (e.code === 'ERR_BAD_REQUEST') errors.password = 'Неверное имя пользователя или пароль';
+        else errors.password = 'Ошибка сети, попробуйте еще раз';
+        formik.setErrors(errors);
       } 
     },
   });
