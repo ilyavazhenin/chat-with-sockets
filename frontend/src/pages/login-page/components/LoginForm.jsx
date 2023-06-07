@@ -44,7 +44,10 @@ const LoginForm = () => {
         localStorage.setItem('userName', formik.values.nickname);
   
         if (response.status === 200) {
-          setUser({userName: localStorage.getItem('userName')});
+          setUser({ 
+            'userName': localStorage.getItem('userName'),
+            'token': localStorage.getItem('token'),
+         });
           navigate('/');
         }
       } catch (e) {
@@ -57,12 +60,6 @@ const LoginForm = () => {
       } 
     },
   });
-
-  
-
-  // useEffect(() => {
-  //   redirectOnAuth();
-  // });
 
   return (
     <Form onSubmit={formik.handleSubmit}>

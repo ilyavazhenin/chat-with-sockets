@@ -11,7 +11,7 @@ import Main from './pages/main-page';
 import CurrentUserContext from './utils/auth-context';
 
 function App() {
-  const [user, setUser] = useState({ userName: localStorage.getItem('userName') });
+  const [user, setUser] = useState({ userName: localStorage.getItem('userName'), token: localStorage.getItem('token')});
   console.log(user, 'user in app');
 
   return (
