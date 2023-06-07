@@ -9,21 +9,25 @@ import LoginCard from './pages/login-page';
 import Main from './pages/main-page';
 
 import CurrentUserContext from './utils/auth-context';
+import { Provider } from 'react-redux';
+import store from './slices/index'
 
 function App() {
   const [user, setUser] = useState({ userName: localStorage.getItem('userName'), token: localStorage.getItem('token')});
   console.log(user, 'user in app');
 
   return (
-    <CurrentUserContext.Provider value={{ user, setUser }}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Main />} />
-          <Route path="login" element={<LoginCard />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </CurrentUserContext.Provider>
+    <Provider store={store}>
+      <CurrentUserContext.Provider value={{ user, setUser }}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Main />} />
+            <Route path="login" element={<LoginCard />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </CurrentUserContext.Provider>
+    </Provider>
     
   );
 }

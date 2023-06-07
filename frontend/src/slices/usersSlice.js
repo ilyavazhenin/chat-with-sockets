@@ -8,10 +8,12 @@ const usersSlice = createSlice({
   name: 'users',
   initialState,
   reducers: {
-    addUsers: usersAdapter.addOne,
+    addUser: usersAdapter.addOne,
+    addUsers: usersAdapter.addMany,
   },
 });
 
 export default usersSlice.reducer;
 export const { actions } = usersSlice;
 export const selectors = usersAdapter.getSelectors((state) => state.users);
+

@@ -1,4 +1,17 @@
+import { useSelector, useDispatch } from 'react-redux';
+import { selectors, actions as messagesActions } from '../../../slices/messagesSlice.js';
+// import { useEffect, useContext } from 'react';
+// import CurrentUserContext from '../../../utils/auth-context.js';
+// import axios from 'axios';
+
 const MessagesBox = () => {
+
+  // const { user } = useContext(CurrentUserContext);
+  const dispatch = useDispatch(); // понадобится чтобы диспатчить сообщения чата
+  const messages = useSelector(selectors.selectAll);
+
+  console.log(messages, 'messages!')
+
   return (
     <div className="col p-0 h-100">
       <div className="d-flex flex-column h-100">
