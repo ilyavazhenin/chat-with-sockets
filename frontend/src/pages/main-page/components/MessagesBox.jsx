@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { selectors, actions as messagesActions } from '../../../slices/messagesSlice.js';
+import { selectors } from '../../../slices/messagesSlice.js';
 // import { useEffect, useContext } from 'react';
 // import CurrentUserContext from '../../../utils/auth-context.js';
 // import axios from 'axios';
@@ -7,7 +7,7 @@ import { selectors, actions as messagesActions } from '../../../slices/messagesS
 const MessagesBox = () => {
 
   // const { user } = useContext(CurrentUserContext);
-  const dispatch = useDispatch(); // понадобится чтобы диспатчить сообщения чата
+  // const dispatch = useDispatch(); // понадобится чтобы диспатчить сообщения чата
   const messages = useSelector(selectors.selectAll);
 
   console.log(messages, 'messages!')

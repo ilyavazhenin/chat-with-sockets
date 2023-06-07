@@ -1,12 +1,12 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { selectors, actions as channelsActions } from '../../../slices/channelsSlice.js';
+import { selectors } from '../../../slices/channelsSlice.js';
 // import { useEffect, useContext } from 'react';
 // import CurrentUserContext from '../../../utils/auth-context.js';
 // import axios from 'axios';
 
 const ChannelsBox = () => {
   // const { user } = useContext(CurrentUserContext);
-  const dispatch = useDispatch(); // понадобится чтобы диспатчить новые каналые
+  // const dispatch = useDispatch(); // понадобится чтобы диспатчить новые каналые
   const channels = useSelector(selectors.selectAll);
 
   console.log(channels, 'channels!')
