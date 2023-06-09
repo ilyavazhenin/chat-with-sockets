@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CurrentUserContext from '../../utils/auth-context';
 import Navbar from './components/Navbar';
@@ -8,12 +8,14 @@ import { useDispatch } from 'react-redux';
 import { actions as channelsActions } from '../../slices/channelsSlice';
 import { actions as messagesActions } from '../../slices/messagesSlice';
 import axios from 'axios';
+import ActiveChannelContext from '../../utils/active-channel-context';
 
 
 const Main = () => {
   const navigate = useNavigate();
   const { user } = useContext(CurrentUserContext);
   const dispatch = useDispatch();
+  const [activeChannel, setActiveChannel] = useState({ id: null, channelName: null });
 
   useEffect(() => {
     if (!user.userName) navigate('/login');
@@ -27,7 +29,7 @@ const Main = () => {
       })
       .catch((err) => console.log(err, 'oops, ERROR in Main in useEffect!'));
     }
-  }, []);
+  }, [dispatch, navigate, user.token, user.userName]);
   
   return (
     <div className="h-100" id="chat">
@@ -35,8 +37,10 @@ const Main = () => {
         <Navbar />
         <div className="container h-100 my-4 overflow-hidden rounded shadow">
           <div className="row h-100 bg-white flex-md-row">
-            <ChannelsBox />
-            <MessagesBox />
+            <ActiveChannelContext.Provider value={{ activeChannel, setActiveChannel }}>
+              <ChannelsBox />
+              <MessagesBox />
+            </ActiveChannelContext.Provider>
           </div>
         </div>
       </div>  
