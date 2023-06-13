@@ -15,7 +15,7 @@ const Main = () => {
   const navigate = useNavigate();
   const { user } = useContext(CurrentUserContext);
   const dispatch = useDispatch();
-  const [activeChannel, setActiveChannel] = useState({ id: null, channelName: null });
+  const [activeChannel, setActiveChannel] = useState({ id: 1, channelName: 'general' });
 
   useEffect(() => {
     if (!user.userName) navigate('/login');

@@ -1,41 +1,57 @@
-import { useContext, useRef } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { msgSelectors } from '../../../slices/messagesSlice.js';
-import { usersSelectors } from '../../../slices/usersSlice.js';
 import ActiveChannelContext from '../../../utils/active-channel-context.js';
-// import { useEffect, useContext } from 'react';
-// import CurrentUserContext from '../../../utils/auth-context.js';
-// import axios from 'axios';
+import { io } from "socket.io-client";
+import { useDispatch } from 'react-redux';
+import { actions as messagesActions } from '../../../slices/messagesSlice';
+
+const socket = io.connect('http://localhost:3000', {
+  auth: {
+    token: localStorage.getItem('token'),
+  }
+});
 
 const MessagesBox = () => {
+  
+  const dispatch = useDispatch();
 
-  // const { user } = useContext(CurrentUserContext);
-  // const dispatch = useDispatch(); // понадобится чтобы диспатчить сообщения чата
   const messages = useSelector(msgSelectors.selectAll);
-  const users = useSelector(usersSelectors.selectAll);
   const { activeChannel } = useContext(ActiveChannelContext);
 
   console.log(messages, 'messages!');
-  // const [currentMsg, setCurrentMsg] = useState('');
   const msgRef = useRef();
+  const userName = localStorage.getItem('userName');
 
   const handleMsgSubmit = (e) => {
     e.preventDefault();
     const currentMsg = msgRef.current.value;
-    console.log(currentMsg);
+    console.log(`${userName}: `, JSON.stringify(currentMsg));
+    socket.connect();
+    socket.emit('newMessage', { message: currentMsg, activeChannelId: activeChannel.id });
+    msgRef.current.value = '';
   };
+
+  useEffect(() => {
+    socket.on('newMessage', (messageWithId) => {
+      console.log(messageWithId, 'getting msg obj from server');
+      dispatch(messagesActions.addMessage(messageWithId)); 
+    });
+    socket.close();
+  }, [dispatch]);
 
   return (
     <div className="col p-0 h-100">
       <div className="d-flex flex-column h-100">
         <div className="bg-light mb-4 p-3 shadow-sm small">
           <p className="m-0"><b># {activeChannel.channelName}</b></p>
-          <span className="text-muted">{messages.length} сообщений в канале</span>
+          <span className="text-muted">{messages.filter((msg) => msg.activeChannelId === activeChannel.id).length} сообщений в канале</span>
         </div>
         <div id="messages-box" className="chat-messages overflow-auto px-5">
-          {messages.map((msg) => {
+          {messages.filter((msg) => msg.activeChannelId === activeChannel.id)
+            .map((msg) => {
             return (
-              <div className="text-break mb-2"><b>{users[0].name}</b>: {msg.text}</div>
+              <div className="text-break mb-2" key={msg.id}><b>{userName}</b>: {msg.message}</div>
             );
           })}
           
