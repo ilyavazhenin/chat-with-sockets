@@ -35,11 +35,7 @@ const LoginForm = () => {
         const response = await axios.post('/api/v1/login', { 
           username: formik.values.nickname,
           password: formik.values.password,
-        } );
-        //TODO: почистить консольлоги
-        console.log(JSON.stringify(values, null, 2));
-        console.log(response, 'response');
-        console.log(response.data, 'resp data');
+        });
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('userName', formik.values.nickname);
   
@@ -52,7 +48,6 @@ const LoginForm = () => {
         }
       } catch (e) {
         setUser(null);
-        console.log(e, 'E')
         const errors = {};
         if (e.code === 'ERR_BAD_REQUEST') errors.password = 'Неверное имя пользователя или пароль';
         else errors.password = 'Ошибка сети, попробуйте еще раз';
@@ -77,7 +72,6 @@ const LoginForm = () => {
                 <div className="text-danger">{formik.errors.nickname}</div>
               ) : null}
           </Form.Text>
-
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formPassword">
