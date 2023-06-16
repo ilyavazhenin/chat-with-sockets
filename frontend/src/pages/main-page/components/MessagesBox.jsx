@@ -2,17 +2,11 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { msgSelectors } from '../../../slices/messagesSlice.js';
 import ActiveChannelContext from '../../../utils/active-channel-context.js';
-import { io } from "socket.io-client";
 import { useDispatch } from 'react-redux';
 import { actions as messagesActions } from '../../../slices/messagesSlice';
 import CurrentUserContext from '../../../utils/auth-context.js';
 import Badge from 'react-bootstrap/Badge';
-
-const socket = io.connect('http://localhost:3000', {
-  auth: {
-    token: localStorage.getItem('token'),
-  }
-});
+import { socket } from '../index';
 
 const MessagesBox = () => {
   const [socketError, setSocketError] = useState({ message: ''});
@@ -47,7 +41,7 @@ const MessagesBox = () => {
       console.log(messageWithId, 'getting msg obj from server');
       dispatch(messagesActions.addMessage(messageWithId)); 
     });
-    socket.close();
+    // socket.close();
   }, [dispatch]);
 
   return (

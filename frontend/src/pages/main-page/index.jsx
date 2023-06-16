@@ -9,9 +9,16 @@ import { actions as channelsActions } from '../../slices/channelsSlice';
 import { actions as messagesActions } from '../../slices/messagesSlice';
 import axios from 'axios';
 import ActiveChannelContext from '../../utils/active-channel-context';
+import { io } from "socket.io-client";
 
+export const socket = io.connect('http://localhost:3000', {
+  auth: {
+    token: localStorage.getItem('token'),
+  }
+});
 
 const Main = () => {
+  
   const navigate = useNavigate();
   const { user } = useContext(CurrentUserContext);
   const dispatch = useDispatch();

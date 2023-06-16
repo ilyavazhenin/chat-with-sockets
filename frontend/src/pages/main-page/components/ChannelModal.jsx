@@ -1,13 +1,22 @@
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useDispatch } from "react-redux";
+import { actions as channelsActions } from "../../../slices/channelsSlice";
+import { socket } from "../index";
+import ActiveChannelContext from "../../../utils/active-channel-context.js";
+import CurrentUserContext from "../../../utils/auth-context";
 
 const ChannelModal = (props) => {
+  const { setActiveChannel } = useContext(ActiveChannelContext);
+  const { user } = useContext(CurrentUserContext);
+  const dispatch = useDispatch();
+
   const formik = useFormik({
     initialValues: {
       channelName: "",
@@ -19,10 +28,30 @@ const ChannelModal = (props) => {
         .required("Обязательное поле"),
     }),
     onSubmit: async (values) => {
-      console.log(values.channelName, 'Channel name!');
+      console.log(values.channelName, "Channel name!");
+      const newChannel = {
+        name: values.channelName,
+        createdByUser: user.userName,
+      };
+      socket.connect();
+      await socket.emit("newChannel", newChannel, () => {});
       props.onHide();
     },
   });
+
+  useEffect(() => {
+    socket.on("newChannel", (createdChannel) => {
+      console.log(createdChannel, "getting channel obj from server");
+      dispatch(channelsActions.addChannel(createdChannel));
+      if (user.userName === createdChannel.createdByUser) {
+        setActiveChannel({
+          id: createdChannel.id,
+          channelName: createdChannel.name,
+        });
+      }
+    });
+    // socket.close();
+  }, [dispatch, setActiveChannel, user]);
 
   return (
     <Modal

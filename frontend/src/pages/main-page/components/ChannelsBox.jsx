@@ -4,14 +4,15 @@ import { useSelector } from 'react-redux';
 import { selectors } from '../../../slices/channelsSlice.js';
 import ActiveChannelContext from '../../../utils/active-channel-context.js';
 import AddChannelButton from './ChannelModal.jsx';
+import ChannelControlBtn from './ChannelControlBtn.jsx';
 
 const ChannelsBox = () => {
   const channels = useSelector(selectors.selectAll);
   const { activeChannel, setActiveChannel } = useContext(ActiveChannelContext);
 
   //TODO: использовать cn-библиотеку? или refы?
-  const activeChannelClasses = 'w-100 rounded-0 text-start btn btn-secondary';
-  const innactiveChannelClasses = 'w-100 rounded-0 text-start btn';
+  const activeChannelClasses = 'w-100 rounded-0 text-start text-truncate btn btn-secondary';
+  const innactiveChannelClasses = 'w-100 rounded-0 text-start text-truncate btn';
 
   const isChannelActive = (currentIterId) => activeChannel.id === currentIterId;
 
@@ -32,13 +33,18 @@ const ChannelsBox = () => {
         return (
           //TODO: УБРАТЬ В ОТДЕЛЬНЫЙ КОМПОНЕНТ элемент канала в списке
           <li key={channel.id} className="nav-item w-100">
-          <button 
-            type="button" 
-            className={ isChannelActive(channel.id) ? activeChannelClasses : innactiveChannelClasses }
-            onClick={() => setActiveChannel({id: channel.id, channelName: channel.name})}
-          >
-            <span className="me-1">#</span>{channel.name}
-          </button>
+            <div role="group" className="d-flex dropdown btn-group">
+              <button 
+                type="button" 
+                className={ isChannelActive(channel.id) ? activeChannelClasses : innactiveChannelClasses }
+                onClick={() => setActiveChannel({id: channel.id, channelName: channel.name})}
+              >
+                <span className="me-1">#</span>{channel.name}
+              </button>
+              {
+                channel.removable ? <ChannelControlBtn active={isChannelActive(channel.id)}/> : null
+              }
+            </div>
           </li>
         )
       }) }
