@@ -36,10 +36,12 @@ const ChannelModal = (props) => {
       socket.connect();
       await socket.emit("newChannel", newChannel, () => {});
       props.onHide();
+      formik.resetForm();
     },
   });
 
-  useEffect(() => {
+    //TODO: вынести отсюда в родительский компонент, а то мы слушаем событие в модалке, что странно:
+    useEffect(() => {
     socket.on("newChannel", (createdChannel) => {
       console.log(createdChannel, "getting channel obj from server");
       dispatch(channelsActions.addChannel(createdChannel));
@@ -52,6 +54,10 @@ const ChannelModal = (props) => {
     });
     // socket.close();
   }, [dispatch, setActiveChannel, user]);
+
+  useEffect(() => {
+
+  }, []);
 
   return (
     <Modal
@@ -78,6 +84,7 @@ const ChannelModal = (props) => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.channelName}
+              autoFocus
             />
 
             <Form.Text className="text-danger">

@@ -4,12 +4,13 @@ import CurrentUserContext from '../../utils/auth-context';
 import Navbar from './components/Navbar';
 import ChannelsBox from './components/ChannelsBox';
 import MessagesBox from './components/MessagesBox';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { actions as channelsActions } from '../../slices/channelsSlice';
 import { actions as messagesActions } from '../../slices/messagesSlice';
 import axios from 'axios';
 import ActiveChannelContext from '../../utils/active-channel-context';
 import { io } from "socket.io-client";
+import { msgSelectors } from '../../slices/messagesSlice.js';
 
 export const socket = io.connect('http://localhost:3000', {
   auth: {
@@ -17,12 +18,30 @@ export const socket = io.connect('http://localhost:3000', {
   }
 });
 
+
 const Main = () => {
   
   const navigate = useNavigate();
   const { user } = useContext(CurrentUserContext);
   const dispatch = useDispatch();
   const [activeChannel, setActiveChannel] = useState({ id: 1, channelName: 'general' });
+  const messages = useSelector(msgSelectors.selectAll);
+  // socket.on('removeChannel', () => {
+  //   console.log('HEY!');
+  //   setActiveChannel({ id: 1, channelName: 'general' });
+  // });
+
+  socket.on('removeChannel', (data) => {
+    console.log('HEY!');
+    console.log(data, 'data when removing channel');
+    
+    const messagesIdsToDelete = messages
+      .filter((msg) => msg.relatedChannelId === data.id)
+      .map((m) => m.id);
+    dispatch(channelsActions.deleteChannel(data.id));
+    dispatch(messagesActions.deleteMessagesByChannel(messagesIdsToDelete));
+    setActiveChannel({ id: 1, channelName: 'general' });
+    });
 
   useEffect(() => {
     if (!user.userName) navigate('/login');
@@ -36,7 +55,7 @@ const Main = () => {
       })
       .catch((err) => console.log(err, 'oops, ERROR in Main in useEffect!'));
     }
-  }, [dispatch, navigate, user.token, user.userName]);
+  }, [dispatch, navigate, user.token, user.userName, setActiveChannel]);
   
   return (
     <div className="h-100" id="chat">

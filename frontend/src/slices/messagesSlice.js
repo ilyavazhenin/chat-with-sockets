@@ -10,6 +10,7 @@ const messagesSlice = createSlice({
   reducers: {
     addMessages: messagesAdapter.addMany,
     addMessage: messagesAdapter.addOne,
+    deleteMessagesByChannel: messagesAdapter.removeMany,
   },
 });
 

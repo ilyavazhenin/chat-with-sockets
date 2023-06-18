@@ -1,26 +1,21 @@
-import { useEffect } from 'react';
-import { useContext } from 'react';
+import { useEffect, useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { selectors } from '../../../slices/channelsSlice.js';
 import ActiveChannelContext from '../../../utils/active-channel-context.js';
 import AddChannelButton from './ChannelModal.jsx';
 import ChannelControlBtn from './ChannelControlBtn.jsx';
+import { socket } from '../index.jsx';
 
 const ChannelsBox = () => {
   const channels = useSelector(selectors.selectAll);
   const { activeChannel, setActiveChannel } = useContext(ActiveChannelContext);
 
-  //TODO: использовать cn-библиотеку? или refы?
   const activeChannelClasses = 'w-100 rounded-0 text-start text-truncate btn btn-secondary';
   const innactiveChannelClasses = 'w-100 rounded-0 text-start text-truncate btn';
 
   const isChannelActive = (currentIterId) => activeChannel.id === currentIterId;
 
   console.log(channels, 'channels!');
-
-  useEffect(() => {
-    setActiveChannel({ id: 1, channelName: 'general' })
-  }, [setActiveChannel])
 
  return (
   <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
@@ -42,7 +37,7 @@ const ChannelsBox = () => {
                 <span className="me-1">#</span>{channel.name}
               </button>
               {
-                channel.removable ? <ChannelControlBtn active={isChannelActive(channel.id)}/> : null
+                channel.removable ? <ChannelControlBtn active={isChannelActive(channel.id)} channelId={channel.id}/> : null
               }
             </div>
           </li>
