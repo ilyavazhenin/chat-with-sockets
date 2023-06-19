@@ -1,10 +1,9 @@
-import { useEffect, useContext } from 'react';
+import { useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { selectors } from '../../../slices/channelsSlice.js';
 import ActiveChannelContext from '../../../utils/active-channel-context.js';
 import AddChannelButton from './ChannelModal.jsx';
 import ChannelControlBtn from './ChannelControlBtn.jsx';
-import { socket } from '../index.jsx';
 
 const ChannelsBox = () => {
   const channels = useSelector(selectors.selectAll);

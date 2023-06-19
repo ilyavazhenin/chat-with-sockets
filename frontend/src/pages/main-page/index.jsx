@@ -11,6 +11,7 @@ import axios from 'axios';
 import ActiveChannelContext from '../../utils/active-channel-context';
 import { io } from "socket.io-client";
 import { msgSelectors } from '../../slices/messagesSlice.js';
+import { selectors } from '../../slices/channelsSlice';
 
 export const socket = io.connect('http://localhost:3000', {
   auth: {
@@ -26,10 +27,7 @@ const Main = () => {
   const dispatch = useDispatch();
   const [activeChannel, setActiveChannel] = useState({ id: 1, channelName: 'general' });
   const messages = useSelector(msgSelectors.selectAll);
-  // socket.on('removeChannel', () => {
-  //   console.log('HEY!');
-  //   setActiveChannel({ id: 1, channelName: 'general' });
-  // });
+  const channels = useSelector(selectors.selectAll);
 
   socket.on('removeChannel', (data) => {
     console.log('HEY!');
@@ -41,7 +39,13 @@ const Main = () => {
     dispatch(channelsActions.deleteChannel(data.id));
     dispatch(messagesActions.deleteMessagesByChannel(messagesIdsToDelete));
     setActiveChannel({ id: 1, channelName: 'general' });
-    });
+  });
+
+  socket.on('renameChannel', (renamedChannel) => {
+    console.log('RENAMING!');
+    console.log(renamedChannel, 'data when renaming channel');
+    dispatch(channelsActions.renameChannel({ id: renamedChannel.id, changes: { name: renamedChannel.name } }));
+  });
 
   useEffect(() => {
     if (!user.userName) navigate('/login');
@@ -55,7 +59,7 @@ const Main = () => {
       })
       .catch((err) => console.log(err, 'oops, ERROR in Main in useEffect!'));
     }
-  }, [dispatch, navigate, user.token, user.userName, setActiveChannel]);
+  }, [dispatch, navigate, user.token, user.userName, setActiveChannel, channels]);
   
   return (
     <div className="h-100" id="chat">
