@@ -1,29 +1,29 @@
 import Card from 'react-bootstrap/Card';
-import LoginForm from './components/LoginForm';
+import RegisterForm from './components/RegisterForm';
 
-const LoginCard = () => {
+const RegisterCard = () => {
   return (
     <div className="d-flex justify-content-center align-items-center min-vh-100 bg-light">
       <div className="row" style={{ maxWidth: "590px" }}>
         <div className="col">
           <Card>
             <Card.Body>
-              <div className="row">
+              <div className="row align-items-center">
                 <div className="col">
-                  <Card.Img variant="top" src="assets/chat-box.png" />
+                  <Card.Img variant="top" src="assets/sign-up.svg"/>
                 </div>
                 <div className="col w-100">
                   <Card.Title>
-                    <h2>Войти</h2>
+                    <h2>Регистрация</h2>
                   </Card.Title>
-                  <LoginForm/>
+                  <RegisterForm/>
                 </div>
               </div>
             </Card.Body>
               <Card.Footer>
                   <div>
-                    <div>Нет аккаунта?</div>
-                    <a href="/signup">Регистрация</a> 
+                    <div>Уже есть аккаунт?</div>
+                    <a href="/login">Войти</a> 
                   </div>
               </Card.Footer>
           </Card>
@@ -33,4 +33,4 @@ const LoginCard = () => {
   );
 }
 
-export default LoginCard;
+export default RegisterCard;

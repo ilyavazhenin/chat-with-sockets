@@ -6,7 +6,9 @@ import { useState } from 'react';
 
 import NotFound from './pages/404-page';
 import LoginCard from './pages/login-page';
+import RegisterCard from './pages/registration';
 import Main from './pages/main-page';
+import Navbar from './pages/main-page/components/Navbar';
 
 import CurrentUserContext from './utils/auth-context';
 import { Provider } from 'react-redux';
@@ -19,13 +21,16 @@ function App() {
   return (
     <Provider store={store}>
       <CurrentUserContext.Provider value={{ user, setUser }}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Main />} />
-            <Route path="login" element={<LoginCard />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
+      
+          <BrowserRouter>
+          <Navbar />
+            <Routes>
+              <Route path="/" element={<Main />} />
+              <Route path="login" element={<LoginCard />} />
+              <Route path="signup" element={<RegisterCard />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
       </CurrentUserContext.Provider>
     </Provider>
     

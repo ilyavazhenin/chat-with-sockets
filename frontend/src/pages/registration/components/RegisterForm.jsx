@@ -9,7 +9,7 @@ import CurrentUserContext from '../../../utils/auth-context';
 
 //TODO: вынести в утилс и возможно сделать через юзэффект
 
-const LoginForm = () => {
+const RegisterForm = () => {
 
   const { setUser } = useContext(CurrentUserContext);
   const navigate = useNavigate();
@@ -28,29 +28,36 @@ const LoginForm = () => {
         .min(3, "Пароль должен состоять минимум из 3 символов")
         .max(20, "Никнейм должен быть не длиннее 20 символов")
         .required("Обязательно к заполнению"),
+      confirmPassword: Yup.string()
+        .min(3, "Пароль должен состоять минимум из 3 символов")
+        .max(20, "Никнейм должен быть не длиннее 20 символов")
+        .required("Обязательно к заполнению")
+        .oneOf([Yup.ref('password')], 'Пароли должны совпадать'),
     }),
     onSubmit: async (values) => {
       //TODO: вынести потом в отдельную функцию в утилс:
       try {
-        const response = await axios.post('/api/v1/login', { 
+        const response = await axios.post('/api/v1/signup', { 
           username: formik.values.nickname,
           password: formik.values.password,
         });
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('userName', formik.values.nickname);
   
-        if (response.status === 200) {
+        if (response.status === 201) {
           setUser({ 
             'userName': localStorage.getItem('userName'),
             'token': localStorage.getItem('token'),
          });
           navigate('/');
         }
+
       } catch (e) {
         setUser(null);
+        console.log(e, 'ERROR');
         const errors = {};
-        if (e.code === 'ERR_BAD_REQUEST') errors.password = 'Неверное имя пользователя или пароль';
-        else errors.password = 'Ошибка сети, попробуйте еще раз';
+        if (e.response.status === 409) errors.nickname = 'Такой пользователь уже существует';
+        else errors.nickname = 'Ошибка сети, попробуйте еще раз';
         formik.setErrors(errors);
       } 
     },
@@ -88,15 +95,31 @@ const LoginForm = () => {
                 <div className="text-danger">{formik.errors.password}</div>
               ) : null}
           </Form.Text>
+      </Form.Group>
+
+      <Form.Group className="mb-3" controlId="confirmPassword">
+        <Form.Label>Пароль</Form.Label>
+        <Form.Control
+          type="password"
+          name="confirmPassword"
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          value={formik.values.confirmPassword} />
+
+          <Form.Text className="text-danger">
+              {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
+                <div className="text-danger">{formik.errors.confirmPassword}</div>
+              ) : null}
+          </Form.Text>
 
       </Form.Group>
       
       
       <Button variant="outline-primary" type="submit" className="float-end mt-2">
-        Войти
+        Зарегистрироваться
       </Button>
     </Form>
   );
 };
 
-export default LoginForm;
+export default RegisterForm;
