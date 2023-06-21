@@ -12,7 +12,7 @@ import { selectors } from "../../../slices/channelsSlice";
 import { useEffect, useRef } from "react";
 
 const RenameChannelModal = (props) => {
-
+  //TODO: сделать переиспользуемый инстанс схемы? для создания и редактирования канала
   const { currentchannel } = props;
   const formik = useFormik({
     initialValues: {
@@ -22,7 +22,8 @@ const RenameChannelModal = (props) => {
       channelName: Yup.string()
         .min(3, "От 3 до 20 символов")
         .max(20, "От 3 до 20 символов")
-        .required("Обязательное поле"),
+        .required("Обязательное поле")
+        .notOneOf(props.allchannels, "Должно быть уникальным"),
     }),
     onSubmit: (values) => {
       const renamedChannel = {
@@ -69,7 +70,6 @@ const RenameChannelModal = (props) => {
               type="text"
               name="channelName"
               onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
               value={formik.values.channelName}
               autoFocus
               ref={inputRef}
@@ -113,7 +113,9 @@ const RenameChannelButton = (props) => {
   const [modalShow, setModalShow] = useState(false);
   const channels = useSelector(selectors.selectAll);
   const currentChannel = channels.find((el) => el.id === props.channelId);
-  
+  const channelsNames = channels
+    .map((channel) => channel.name);
+  console.log(channelsNames, 'channelsNames');
   return (
     <>
       <button
@@ -123,11 +125,11 @@ const RenameChannelButton = (props) => {
       >
         Переименовать
       </button>
-
       <RenameChannelModal
         show={modalShow}
         onHide={() => setModalShow(false)}
         currentchannel={currentChannel}
+        allchannels={channelsNames}
       />
     </>
   );

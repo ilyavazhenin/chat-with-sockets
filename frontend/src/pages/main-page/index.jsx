@@ -19,9 +19,7 @@ export const socket = io.connect('http://localhost:3000', {
   }
 });
 
-
 const Main = () => {
-  
   const navigate = useNavigate();
   const { user } = useContext(CurrentUserContext);
   const dispatch = useDispatch();
@@ -29,10 +27,7 @@ const Main = () => {
   const messages = useSelector(msgSelectors.selectAll);
   const channels = useSelector(selectors.selectAll);
 
-  socket.on('removeChannel', (data) => {
-    console.log('HEY!');
-    console.log(data, 'data when removing channel');
-    
+  socket.on('removeChannel', (data) => {    
     const messagesIdsToDelete = messages
       .filter((msg) => msg.relatedChannelId === data.id)
       .map((m) => m.id);
@@ -42,9 +37,8 @@ const Main = () => {
   });
 
   socket.on('renameChannel', (renamedChannel) => {
-    console.log('RENAMING!');
-    console.log(renamedChannel, 'data when renaming channel');
     dispatch(channelsActions.renameChannel({ id: renamedChannel.id, changes: { name: renamedChannel.name } }));
+    if (activeChannel.id === renamedChannel.id) setActiveChannel({ id: renamedChannel.id, channelName: renamedChannel.name });
   });
 
   useEffect(() => {
