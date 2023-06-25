@@ -6,10 +6,10 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import CurrentUserContext from '../../../utils/auth-context';
-
-//TODO: вынести в утилс и возможно сделать через юзэффект
+import { useTranslation } from 'react-i18next';
 
 const LoginForm = () => {
+  const { t } = useTranslation();
 
   const { setUser } = useContext(CurrentUserContext);
   const navigate = useNavigate();
@@ -21,13 +21,9 @@ const LoginForm = () => {
     },
     validationSchema: Yup.object({
       nickname: Yup.string()
-        .min(3, "Никнейм должен состоять минимум из 3 символов")
-        .max(15, "Никнейм должен быть не длиннее 15 символов")
-        .required("Обязательно к заполнению"),
+        .required(t('general.errors.requiredField')),
       password: Yup.string()
-        .min(3, "Пароль должен состоять минимум из 3 символов")
-        .max(20, "Никнейм должен быть не длиннее 20 символов")
-        .required("Обязательно к заполнению"),
+        .required(t('general.errors.requiredField')),
     }),
     onSubmit: async (values) => {
       //TODO: вынести потом в отдельную функцию в утилс:
@@ -49,8 +45,8 @@ const LoginForm = () => {
       } catch (e) {
         setUser(null);
         const errors = {};
-        if (e.code === 'ERR_BAD_REQUEST') errors.password = 'Неверное имя пользователя или пароль';
-        else errors.password = 'Ошибка сети, попробуйте еще раз';
+        if (e.code === 'ERR_BAD_REQUEST') errors.password = t('login.errors.wrongCredentials');
+        else errors.password = t('general.errors.badNetwork');
         formik.setErrors(errors);
       } 
     },
@@ -59,7 +55,7 @@ const LoginForm = () => {
   return (
     <Form onSubmit={formik.handleSubmit}>
       <Form.Group className="mb-3" controlId="formNickname">
-        <Form.Label>Ваш ник</Form.Label>
+        <Form.Label>{t('login.nickname')}</Form.Label>
         <Form.Control 
           type="text"
           name="nickname" 
@@ -75,7 +71,7 @@ const LoginForm = () => {
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formPassword">
-        <Form.Label>Пароль</Form.Label>
+        <Form.Label>{t('login.password')}</Form.Label>
         <Form.Control
           type="password"
           name="password"
@@ -93,7 +89,7 @@ const LoginForm = () => {
       
       
       <Button variant="outline-primary" type="submit" className="float-end mt-2">
-        Войти
+      {t('login.signin')}
       </Button>
     </Form>
   );

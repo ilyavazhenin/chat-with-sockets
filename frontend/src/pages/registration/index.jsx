@@ -1,7 +1,10 @@
 import Card from 'react-bootstrap/Card';
 import RegisterForm from './components/RegisterForm';
+import { useTranslation } from 'react-i18next';
 
 const RegisterCard = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="d-flex justify-content-center align-items-center min-vh-100 bg-light">
       <div className="row" style={{ maxWidth: "590px" }}>
@@ -14,7 +17,7 @@ const RegisterCard = () => {
                 </div>
                 <div className="col w-100">
                   <Card.Title>
-                    <h2>Регистрация</h2>
+                    <h2>{t('signup.header')}</h2>
                   </Card.Title>
                   <RegisterForm/>
                 </div>
@@ -22,8 +25,8 @@ const RegisterCard = () => {
             </Card.Body>
               <Card.Footer>
                   <div>
-                    <div>Уже есть аккаунт?</div>
-                    <a href="/login">Войти</a> 
+                    <div>{t('signup.alreadySignedUp')}</div>
+                    <a href="/login">{t('signup.signin')}</a> 
                   </div>
               </Card.Footer>
           </Card>

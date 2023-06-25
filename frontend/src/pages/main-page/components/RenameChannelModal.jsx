@@ -10,8 +10,11 @@ import { socket } from "../index";
 import { useSelector } from "react-redux";
 import { selectors } from "../../../slices/channelsSlice";
 import { useEffect, useRef } from "react";
+import { useTranslation } from 'react-i18next';
+
 
 const RenameChannelModal = (props) => {
+  const { t } = useTranslation();
   //TODO: сделать переиспользуемый инстанс схемы? для создания и редактирования канала
   const { currentchannel } = props;
   const formik = useFormik({
@@ -20,10 +23,10 @@ const RenameChannelModal = (props) => {
     },
     validationSchema: Yup.object({
       channelName: Yup.string()
-        .min(3, "От 3 до 20 символов")
-        .max(20, "От 3 до 20 символов")
-        .required("Обязательное поле")
-        .notOneOf(props.allchannels, "Должно быть уникальным"),
+        .min(3, t('chat.errors.from3to20symbls'))
+        .max(20, t('chat.errors.from3to20symbls'))
+        .required(t('general.errors.requiredField'))
+        .notOneOf(props.allchannels, t('chat.errors.uniqueChannel')),
     }),
     onSubmit: (values) => {
       const renamedChannel = {
@@ -56,7 +59,7 @@ const RenameChannelModal = (props) => {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Переименовать канал
+       {t('chat.modals.renameChannel')}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -65,7 +68,7 @@ const RenameChannelModal = (props) => {
             className="mb-3"
             controlId="channelName"
           >
-            <Form.Label>Название канала</Form.Label>
+            <Form.Label>{t('chat.modals.channelName')}</Form.Label>
             <Form.Control
               type="text"
               name="channelName"
@@ -90,7 +93,7 @@ const RenameChannelModal = (props) => {
                 onClick={props.onHide}
                 variant="secondary"
               >
-                Отменить
+                {t('chat.modals.cancel')}
               </Button>
             </Col>
             <Col>
@@ -99,7 +102,7 @@ const RenameChannelModal = (props) => {
                 variant="primary"
                 onClick={formik.handleSubmit}
               >
-                Отправить
+                {t('chat.modals.send')}
               </Button>
             </Col>
           </Row>
@@ -110,6 +113,7 @@ const RenameChannelModal = (props) => {
 };
 
 const RenameChannelButton = (props) => {
+  const { t } = useTranslation();
   const [modalShow, setModalShow] = useState(false);
   const channels = useSelector(selectors.selectAll);
   const currentChannel = channels.find((el) => el.id === props.channelId);
@@ -123,7 +127,7 @@ const RenameChannelButton = (props) => {
         type="button"
         className="p-0 text-primary btn btn-group-vertical"
       >
-        Переименовать
+         {t('chat.renameChannel')}
       </button>
       <RenameChannelModal
         show={modalShow}

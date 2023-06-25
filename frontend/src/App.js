@@ -12,16 +12,29 @@ import Navbar from './pages/main-page/components/Navbar';
 
 import CurrentUserContext from './utils/auth-context';
 import { Provider } from 'react-redux';
-import store from './slices/index'
+import store from './slices/index';
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import resources from '../../frontend/src/i18n/index'
 
 function App() {
   const [user, setUser] = useState({ userName: localStorage.getItem('userName'), token: localStorage.getItem('token')});
   console.log(user, 'user in app');
 
+  i18n
+  .use(initReactI18next)
+  .init({
+    fallbackLng: 'ru',
+    debug: true,
+    resources,
+    interpolation: {
+      escapeValue: false,
+    },
+  });
+
   return (
     <Provider store={store}>
       <CurrentUserContext.Provider value={{ user, setUser }}>
-      
           <BrowserRouter>
           <Navbar />
             <Routes>

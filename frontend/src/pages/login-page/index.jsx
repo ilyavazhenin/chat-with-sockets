@@ -1,7 +1,10 @@
 import Card from 'react-bootstrap/Card';
 import LoginForm from './components/LoginForm';
+import { useTranslation } from 'react-i18next';
 
 const LoginCard = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="d-flex justify-content-center align-items-center min-vh-100 bg-light">
       <div className="row" style={{ maxWidth: "590px" }}>
@@ -14,7 +17,7 @@ const LoginCard = () => {
                 </div>
                 <div className="col w-100">
                   <Card.Title>
-                    <h2>Войти</h2>
+                    <h2>{t('login.header')}</h2>
                   </Card.Title>
                   <LoginForm/>
                 </div>
@@ -22,8 +25,8 @@ const LoginCard = () => {
             </Card.Body>
               <Card.Footer>
                   <div>
-                    <div>Нет аккаунта?</div>
-                    <a href="/signup">Регистрация</a> 
+                    <div>{t('login.noAcc')}</div>
+                    <a href="/signup">{t('login.signup')}</a> 
                   </div>
               </Card.Footer>
           </Card>

@@ -6,10 +6,12 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import CurrentUserContext from '../../../utils/auth-context';
+import { useTranslation } from 'react-i18next';
 
 //TODO: вынести в утилс и возможно сделать через юзэффект
 
 const RegisterForm = () => {
+  const { t } = useTranslation();
 
   const { setUser } = useContext(CurrentUserContext);
   const navigate = useNavigate();
@@ -21,18 +23,15 @@ const RegisterForm = () => {
     },
     validationSchema: Yup.object({
       nickname: Yup.string()
-        .min(3, "Никнейм должен состоять минимум из 3 символов")
-        .max(15, "Никнейм должен быть не длиннее 15 символов")
-        .required("Обязательно к заполнению"),
+        .min(3, t('signup.errors.from3to15symbls'))
+        .max(20, t('signup.errors.from3to15symbls'))
+        .required(t('general.errors.requiredField')),
       password: Yup.string()
-        .min(3, "Пароль должен состоять минимум из 3 символов")
-        .max(20, "Никнейм должен быть не длиннее 20 символов")
-        .required("Обязательно к заполнению"),
+        .min(6, t('signup.errors.noLessThan6symbls'))
+        .required(t('general.errors.requiredField')),
       confirmPassword: Yup.string()
-        .min(3, "Пароль должен состоять минимум из 3 символов")
-        .max(20, "Никнейм должен быть не длиннее 20 символов")
-        .required("Обязательно к заполнению")
-        .oneOf([Yup.ref('password')], 'Пароли должны совпадать'),
+        .required(t('general.errors.requiredField'))
+        .oneOf([Yup.ref('password')], t('signup.errors.pswrdsMustMatch')),
     }),
     onSubmit: async (values) => {
       //TODO: вынести потом в отдельную функцию в утилс:
@@ -56,8 +55,8 @@ const RegisterForm = () => {
         setUser(null);
         console.log(e, 'ERROR');
         const errors = {};
-        if (e.response.status === 409) errors.nickname = 'Такой пользователь уже существует';
-        else errors.nickname = 'Ошибка сети, попробуйте еще раз';
+        if (e.response.status === 409) errors.nickname = t('signup.errors.userExists');
+        else errors.nickname = t('general.errors.badNetwork');
         formik.setErrors(errors);
       } 
     },
@@ -66,7 +65,7 @@ const RegisterForm = () => {
   return (
     <Form onSubmit={formik.handleSubmit}>
       <Form.Group className="mb-3" controlId="formNickname">
-        <Form.Label>Ваш ник</Form.Label>
+        <Form.Label>{t('signup.nickname')}</Form.Label>
         <Form.Control 
           type="text"
           name="nickname" 
@@ -82,7 +81,7 @@ const RegisterForm = () => {
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formPassword">
-        <Form.Label>Пароль</Form.Label>
+        <Form.Label>{t('signup.password')}</Form.Label>
         <Form.Control
           type="password"
           name="password"
@@ -98,7 +97,7 @@ const RegisterForm = () => {
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="confirmPassword">
-        <Form.Label>Пароль</Form.Label>
+        <Form.Label>{t('signup.confirmPassword')}</Form.Label>
         <Form.Control
           type="password"
           name="confirmPassword"
@@ -113,10 +112,9 @@ const RegisterForm = () => {
           </Form.Text>
 
       </Form.Group>
-      
-      
+       
       <Button variant="outline-primary" type="submit" className="float-end mt-2">
-        Зарегистрироваться
+      {t('signup.signup')}
       </Button>
     </Form>
   );
