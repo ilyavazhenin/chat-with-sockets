@@ -11,8 +11,10 @@ import { actions as channelsActions } from "../../../slices/channelsSlice";
 import { socket } from "../index";
 import ActiveChannelContext from "../../../utils/active-channel-context.js";
 import CurrentUserContext from "../../../utils/auth-context";
+import { useTranslation } from 'react-i18next';
 
 const ChannelModal = (props) => {
+  const { t } = useTranslation();
   const { setActiveChannel } = useContext(ActiveChannelContext);
   const { user } = useContext(CurrentUserContext);
   const dispatch = useDispatch();
@@ -23,9 +25,9 @@ const ChannelModal = (props) => {
     },
     validationSchema: Yup.object({
       channelName: Yup.string()
-        .min(3, "От 3 до 20 символов")
-        .max(20, "От 3 до 20 символов")
-        .required("Обязательное поле"),
+        .min(3, t('chat.errors.from3to20symbls'))
+        .max(20, t('chat.errors.from3to20symbls'))
+        .required(t('general.errors.requiredField')),
     }),
     onSubmit: async (values) => {
       console.log(values.channelName, "Channel name!");
@@ -64,7 +66,7 @@ const ChannelModal = (props) => {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Добавить канал
+          {t('chat.modals.addChannel')}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -73,7 +75,7 @@ const ChannelModal = (props) => {
             className="mb-3"
             controlId="channelName"
           >
-            <Form.Label>Название канала</Form.Label>
+            <Form.Label>{t('chat.modals.channelName')}</Form.Label>
             <Form.Control
               type="text"
               name="channelName"
@@ -98,7 +100,7 @@ const ChannelModal = (props) => {
                 onClick={props.onHide}
                 variant="secondary"
               >
-                Отменить
+                {t('chat.modals.cancel')}
               </Button>
             </Col>
             <Col>
@@ -106,7 +108,7 @@ const ChannelModal = (props) => {
                 type="submit"
                 variant="primary"
               >
-                Отправить
+                {t('chat.modals.send')}
               </Button>
             </Col>
           </Row>

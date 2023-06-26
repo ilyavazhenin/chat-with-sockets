@@ -3,6 +3,7 @@ const ru = {
     page404: {
       pageNotFound: 'Страница не найдена',
       goTo: 'Но вы можете перейти на ',
+      mainPage: 'Главную страницу',
     },
 
     signup: {
@@ -39,17 +40,24 @@ const ru = {
       sendMsg: 'Отправить',
       modals: {
         renameChannel: 'Переименовать канал',
+        deleteChannel: 'Удалить канал',
+        areYouSure: 'Уверены?',
         channelName: 'Название канала',
+        addChannel: 'Добавить канал',
         cancel: 'Отменить',
+        delete: 'Удалить',
         send: 'Отправить',
       },
       messages_other: 'сообщений',
       messages_one: 'сообщение',
       messages_few: 'сообщения',
       messages_many: 'сообщений',
+      enterMessage: 'Введите сообщение...',
+      channelsHeader: 'Каналы',
       errors: {
         from3to20symbls: 'От 3 до 20 символов',
         uniqueChannel: 'Должно быть уникальным',
+        socketError: 'Не получилось отправить сообщение'
       },
 
     },

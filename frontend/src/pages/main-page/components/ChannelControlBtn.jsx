@@ -4,8 +4,10 @@ import Modal from "react-bootstrap/Modal"; //TODO: вынести модалку
 import Button from "react-bootstrap/Button";
 import { useState } from "react";
 import RenameChannelButton from "./RenameChannelModal.jsx";
+import { useTranslation } from "react-i18next";
 
 const ChannelControlBtn = (props) => {
+  const { t } = useTranslation();
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -29,7 +31,7 @@ const ChannelControlBtn = (props) => {
 
         <Dropdown.Menu>
           <Dropdown.Item onClick={handleShow}>
-            Удалить
+            {t('chat.deleteChannel')}
           </Dropdown.Item>
 
           <Dropdown.Item>
@@ -45,21 +47,21 @@ const ChannelControlBtn = (props) => {
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title>Удалить канал</Modal.Title>
+          <Modal.Title>{t('chat.modals.deleteChannel')}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Уверены?</Modal.Body>
+        <Modal.Body>{t('chat.modals.areYouSure')}</Modal.Body>
         <Modal.Footer>
           <Button
             variant="secondary"
             onClick={handleClose}
           >
-            Отменить
+            {t('chat.modals.cancel')}
           </Button>
           <Button
             variant="danger"
             onClick={handleDelete(props.channelId)}
           >
-            Удалить
+            {t('chat.modals.delete')}
           </Button>
         </Modal.Footer>
       </Modal>
