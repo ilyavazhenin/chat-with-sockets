@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useState, useEffect, useContext } from "react";
@@ -54,8 +55,7 @@ const ChannelModal = (props) => {
         });
       }
     });
-    // socket.close();
-  }, [dispatch, setActiveChannel, user]);
+  }, []);
 
   return (
     <Modal

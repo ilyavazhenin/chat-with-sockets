@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useState } from "react";
@@ -47,7 +48,7 @@ const RenameChannelModal = (props) => {
       inputRef.current.focus();
       inputRef.current.select();
     }, 0);
-  }, [props.show, currentchannel.name]);
+  }, [props.show]);
 
   return (
     <Modal

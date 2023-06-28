@@ -15,7 +15,8 @@ import { Provider } from 'react-redux';
 import store from './slices/index';
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import resources from '../../frontend/src/i18n/index'
+import resources from '../../frontend/src/i18n/index';
+import 'react-toastify/dist/ReactToastify.min.css';
 
 function App() {
   const [user, setUser] = useState({ userName: localStorage.getItem('userName'), token: localStorage.getItem('token')});

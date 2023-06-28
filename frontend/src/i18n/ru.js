@@ -48,6 +48,12 @@ const ru = {
         delete: 'Удалить',
         send: 'Отправить',
       },
+      toast: {
+        channelDeleted: 'Канал удалён',
+        channelCreated: 'Канал создан',
+        channelRenamed: 'Канал переименован',
+        loadError: 'Ошибка загрузки данных',
+      },
       messages_other: 'сообщений',
       messages_one: 'сообщение',
       messages_few: 'сообщения',

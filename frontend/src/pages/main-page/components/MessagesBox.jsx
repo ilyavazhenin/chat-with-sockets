@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { msgSelectors } from '../../../slices/messagesSlice.js';
@@ -8,9 +9,14 @@ import CurrentUserContext from '../../../utils/auth-context.js';
 import Badge from 'react-bootstrap/Badge';
 import { socket } from '../index';
 import { useTranslation } from 'react-i18next';
+import filter from 'leo-profanity';
 
 const MessagesBox = () => {
   const { t } = useTranslation();
+
+  filter.add(filter.getDictionary('en'));
+  filter.add(filter.getDictionary('ru'));
+
   const [socketError, setSocketError] = useState({ message: ''});
   
   const dispatch = useDispatch();
@@ -21,11 +27,12 @@ const MessagesBox = () => {
 
   console.log(messages, 'messages!');
   const msgRef = useRef();
+  const bottomRef = useRef();
   const msgsCount = messages.filter((msg) => msg.relatedChannelId === activeChannel.id).length;
 
   const handleMsgSubmit = (e) => {
     e.preventDefault();
-    const currentMsg = msgRef.current.value;
+    const currentMsg = filter.clean(msgRef.current.value);
     socket.connect();
     socket.emit('newMessage', { 
     message: currentMsg, 
@@ -45,11 +52,15 @@ const MessagesBox = () => {
       console.log(messageWithId, 'getting msg obj from server');
       dispatch(messagesActions.addMessage(messageWithId)); 
     });
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
     msgRef.current.focus();
-  }, [activeChannel])
+  }, [activeChannel]);
+
+  useEffect(() => {
+    bottomRef.current.scrollIntoView();
+  }, [handleMsgSubmit]);
 
   return (
     <div className="col p-0 h-100">
@@ -65,6 +76,7 @@ const MessagesBox = () => {
               <div className="text-break mb-2" key={msg.id}><b>{msg.user}</b>: {msg.message}</div>
             );
           })}
+          <div ref={bottomRef} />
         </div>
         <div className="mt-auto px-5 py-3">
           <form noValidate="" className="py-1 border rounded-2" onSubmit={handleMsgSubmit}>
