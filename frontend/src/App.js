@@ -18,6 +18,13 @@ import { initReactI18next } from 'react-i18next';
 import resources from '../../frontend/src/i18n/index';
 import 'react-toastify/dist/ReactToastify.min.css';
 
+import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
+
+const rollbarConfig = {
+  accessToken: 'fb3026f9924146fab176325b87d89453',
+  environment: 'testenv',
+};
+
 function App() {
   const [user, setUser] = useState({ userName: localStorage.getItem('userName'), token: localStorage.getItem('token')});
   console.log(user, 'user in app');
@@ -34,19 +41,23 @@ function App() {
   });
 
   return (
-    <Provider store={store}>
-      <CurrentUserContext.Provider value={{ user, setUser }}>
-          <BrowserRouter>
-          <Navbar />
-            <Routes>
-              <Route path="/" element={<Main />} />
-              <Route path="login" element={<LoginCard />} />
-              <Route path="signup" element={<RegisterCard />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-      </CurrentUserContext.Provider>
-    </Provider>
+    <RollbarProvider config={rollbarConfig}>
+      <ErrorBoundary>
+        <Provider store={store}>
+          <CurrentUserContext.Provider value={{ user, setUser }}>
+            <BrowserRouter>
+            <Navbar />
+              <Routes>
+                <Route path="/" element={<Main />} />
+                <Route path="login" element={<LoginCard />} />
+                <Route path="signup" element={<RegisterCard />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </CurrentUserContext.Provider>
+        </Provider>
+    </ErrorBoundary>
+  </RollbarProvider>
     
   );
 }

@@ -35,13 +35,13 @@ const MessagesBox = () => {
     const currentMsg = filter.clean(msgRef.current.value);
     socket.connect();
     socket.emit('newMessage', { 
-    message: currentMsg, 
-    relatedChannelId: activeChannel.id, 
-    user: user.userName 
-    }, 
-    (response) => console.log(response.status, 'RESPONSE STATUS'));
-    socket.on('connect_error', () => {
-      setSocketError({ message: t('chat.errors.socketError') });
+      message: currentMsg, 
+      relatedChannelId: activeChannel.id, 
+      user: user.userName 
+      }, 
+      (response) => console.log(response.status, 'RESPONSE STATUS'));
+      socket.on('connect_error', () => {
+        setSocketError({ message: t('chat.errors.socketError') });
     });
     msgRef.current.value = '';
     setSocketError({ message: '' });

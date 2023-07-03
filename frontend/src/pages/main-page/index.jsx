@@ -17,9 +17,13 @@ import { useTranslation } from 'react-i18next';
 import notify from '../../utils/toast-notifier';
 
 export const socket = io.connect('http://localhost:3000', {
-  auth: {
-    token: localStorage.getItem('token'),
-  }
+  transportOptions: {
+    polling: {
+      extraHeaders: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      },
+    },
+  },
 });
 
 const Main = () => {
