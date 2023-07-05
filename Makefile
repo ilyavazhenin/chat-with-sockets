@@ -13,9 +13,6 @@ start-backend:
 start-backend-dev:
 	npx start-server -a localhost
 
-deploy:
-	git push heroku main
-
 start:
 	make start-backend & make start-frontend
 
