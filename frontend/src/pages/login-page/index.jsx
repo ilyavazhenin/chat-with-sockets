@@ -1,13 +1,13 @@
 import Card from 'react-bootstrap/Card';
-import LoginForm from './components/LoginForm';
 import { useTranslation } from 'react-i18next';
+import LoginForm from './components/LoginForm';
 
 const LoginCard = () => {
   const { t } = useTranslation();
 
   return (
     <div className="d-flex justify-content-center align-items-center min-vh-100 bg-light">
-      <div className="row" style={{ maxWidth: "590px" }}>
+      <div className="row" style={{ maxWidth: '590px' }}>
         <div className="col">
           <Card>
             <Card.Body>
@@ -19,21 +19,21 @@ const LoginCard = () => {
                   <Card.Title>
                     <h2>{t('login.header')}</h2>
                   </Card.Title>
-                  <LoginForm/>
+                  <LoginForm />
                 </div>
               </div>
             </Card.Body>
-              <Card.Footer>
-                  <div>
-                    <div>{t('login.noAcc')}</div>
-                    <a href="/signup">{t('login.signup')}</a> 
-                  </div>
-              </Card.Footer>
+            <Card.Footer>
+              <div>
+                <div>{t('login.noAcc')}</div>
+                <a href="/signup">{t('login.signup')}</a>
+              </div>
+            </Card.Footer>
           </Card>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default LoginCard;

@@ -1,10 +1,10 @@
-import Dropdown from "react-bootstrap/Dropdown";
-import socket from "../../../utils/socket-init";
-import Modal from "react-bootstrap/Modal"; //TODO: вынести модалку подтверждения в отдельный компонент
-import Button from "react-bootstrap/Button";
-import { useState } from "react";
-import RenameChannelButton from "./RenameChannelModal.jsx";
-import { useTranslation } from "react-i18next";
+import Dropdown from 'react-bootstrap/Dropdown';
+import Modal from 'react-bootstrap/Modal'; // TODO: вынести модалку подтверждения в отдельный компонент
+import Button from 'react-bootstrap/Button';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import RenameChannelButton from './RenameChannelModal.jsx';
+import socket from '../../../utils/socket-init';
 
 const ChannelControlBtn = (props) => {
   const { t } = useTranslation();
@@ -14,15 +14,17 @@ const ChannelControlBtn = (props) => {
 
   const handleDelete = (id) => async (e) => {
     e.preventDefault();
-    await socket.emit("removeChannel", { id });
-    //TODO: добавить отслеживание ошибки, елси не получилось удалить канал
+    await socket.emit('removeChannel', { id });
+    // TODO: добавить отслеживание ошибки, елси не получилось удалить канал
   };
+
+  const { active, channelId } = props;
 
   return (
     <>
       <Dropdown>
         <Dropdown.Toggle
-          variant={props.active ? "secondary" : "light"}
+          variant={active ? 'secondary' : 'light'}
           id="dropdown-basic"
           className="rounded-0"
         >
@@ -35,7 +37,7 @@ const ChannelControlBtn = (props) => {
           </Dropdown.Item>
 
           <Dropdown.Item>
-            <RenameChannelButton channelId={props.channelId}/>
+            <RenameChannelButton channelId={channelId} />
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
@@ -59,7 +61,7 @@ const ChannelControlBtn = (props) => {
           </Button>
           <Button
             variant="danger"
-            onClick={handleDelete(props.channelId)}
+            onClick={handleDelete(channelId)}
           >
             {t('chat.modals.delete')}
           </Button>

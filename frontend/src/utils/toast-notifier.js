@@ -1,14 +1,14 @@
 import { toast } from 'react-toastify';
 
 const toastSettings = {
-  position: "top-right",
+  position: 'top-right',
   autoClose: 1500,
   hideProgressBar: false,
   closeOnClick: true,
   pauseOnHover: true,
   draggable: true,
   progress: undefined,
-  theme: "light",
+  theme: 'light',
 };
 
 const onChannelRemoved = (msg) => toast(msg, {
@@ -39,4 +39,3 @@ const notify = {
 };
 
 export default notify;
-

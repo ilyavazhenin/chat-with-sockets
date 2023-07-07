@@ -1,10 +1,10 @@
-import { io } from "socket.io-client";
+import { io } from 'socket.io-client';
 
 const socket = io({
   transportOptions: {
     polling: {
       extraHeaders: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
     },
   },

@@ -1,12 +1,12 @@
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useFormik } from 'formik';
-import * as Yup from "yup";
+import * as Yup from 'yup';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useContext, useRef, useEffect } from 'react';
-import CurrentUserContext from '../../../utils/auth-context';
 import { useTranslation } from 'react-i18next';
+import CurrentUserContext from '../../../utils/auth-context';
 
 const LoginForm = () => {
   const { t } = useTranslation();
@@ -26,21 +26,21 @@ const LoginForm = () => {
       password: Yup.string()
         .required(t('general.errors.requiredField')),
     }),
-    onSubmit: async (values) => {
-      //TODO: вынести потом в отдельную функцию в утилс:
+    onSubmit: async () => {
+      // TODO: вынести потом в отдельную функцию в утилс:
       try {
-        const response = await axios.post('/api/v1/login', { 
+        const response = await axios.post('/api/v1/login', {
           username: formik.values.nickname,
           password: formik.values.password,
         });
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('userName', formik.values.nickname);
-  
+
         if (response.status === 200) {
-          setUser({ 
-            'userName': localStorage.getItem('userName'),
-            'token': localStorage.getItem('token'),
-         });
+          setUser({
+            userName: localStorage.getItem('userName'),
+            token: localStorage.getItem('token'),
+          });
           navigate('/');
         }
       } catch (e) {
@@ -49,7 +49,7 @@ const LoginForm = () => {
         if (e.code === 'ERR_BAD_REQUEST') errors.password = t('login.errors.wrongCredentials');
         else errors.password = t('general.errors.badNetwork');
         formik.setErrors(errors);
-      } 
+      }
     },
   });
 
@@ -61,19 +61,20 @@ const LoginForm = () => {
     <Form onSubmit={formik.handleSubmit}>
       <Form.Group className="mb-3" controlId="formNickname">
         <Form.Label>{t('login.nickname')}</Form.Label>
-        <Form.Control 
+        <Form.Control
           type="text"
-          name="nickname" 
+          name="nickname"
           ref={nameRef}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          value={formik.values.nickname}/>
+          value={formik.values.nickname}
+        />
 
-          <Form.Text className="text-danger">
-              {formik.touched.nickname && formik.errors.nickname ? (
-                <div className="text-danger">{formik.errors.nickname}</div>
-              ) : null}
-          </Form.Text>
+        <Form.Text className="text-danger">
+          {formik.touched.nickname && formik.errors.nickname ? (
+            <div className="text-danger">{formik.errors.nickname}</div>
+          ) : null}
+        </Form.Text>
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formPassword">
@@ -83,19 +84,19 @@ const LoginForm = () => {
           name="password"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          value={formik.values.password} />
+          value={formik.values.password}
+        />
 
-          <Form.Text className="text-danger">
-              {formik.touched.password && formik.errors.password ? (
-                <div className="text-danger">{formik.errors.password}</div>
-              ) : null}
-          </Form.Text>
+        <Form.Text className="text-danger">
+          {formik.touched.password && formik.errors.password ? (
+            <div className="text-danger">{formik.errors.password}</div>
+          ) : null}
+        </Form.Text>
 
       </Form.Group>
-      
-      
+
       <Button variant="outline-primary" type="submit" className="float-end mt-2">
-      {t('login.signin')}
+        {t('login.signin')}
       </Button>
     </Form>
   );

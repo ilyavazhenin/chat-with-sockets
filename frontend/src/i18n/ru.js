@@ -63,7 +63,7 @@ const ru = {
       errors: {
         from3to20symbls: 'От 3 до 20 символов',
         uniqueChannel: 'Должно быть уникальным',
-        socketError: 'Ошибка соединения'
+        socketError: 'Ошибка соединения',
       },
 
     },
@@ -74,9 +74,9 @@ const ru = {
       errors: {
         requiredField: 'Обязательное поле',
         badNetwork: 'Ошибка сети, попробуйте еще раз',
-      }
+      },
     },
-    
+
   },
 };
 
