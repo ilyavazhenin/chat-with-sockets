@@ -63,7 +63,7 @@ const ru = {
       errors: {
         from3to20symbls: 'От 3 до 20 символов',
         uniqueChannel: 'Должно быть уникальным',
-        socketError: 'Не получилось отправить сообщение'
+        socketError: 'Ошибка соединения'
       },
 
     },

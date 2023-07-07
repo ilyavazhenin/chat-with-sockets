@@ -1,4 +1,5 @@
-import { useContext } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { selectors } from '../../../slices/channelsSlice.js';
 import ActiveChannelContext from '../../../utils/active-channel-context.js';
@@ -6,7 +7,16 @@ import AddChannelButton from './ChannelModal.jsx';
 import ChannelControlBtn from './ChannelControlBtn.jsx';
 import { useTranslation } from 'react-i18next';
 
+import { useDispatch } from "react-redux";
+import { actions as channelsActions } from "../../../slices/channelsSlice";
+import { socket } from "../index";
+import CurrentUserContext from "../../../utils/auth-context";
+
 const ChannelsBox = () => {
+  // const { setActiveChannel } = useContext(ActiveChannelContext);
+  const { user } = useContext(CurrentUserContext);
+  const dispatch = useDispatch();
+
   const { t } = useTranslation();
   const channels = useSelector(selectors.selectAll);
   const { activeChannel, setActiveChannel } = useContext(ActiveChannelContext);
@@ -17,6 +27,19 @@ const ChannelsBox = () => {
   const isChannelActive = (currentIterId) => activeChannel.id === currentIterId;
 
   console.log(channels, 'channels!');
+
+  useEffect(() => {
+    socket.on("newChannel", (createdChannel) => {
+      console.log(createdChannel, "getting channel obj from server");
+      dispatch(channelsActions.addChannel(createdChannel));
+      if (user.userName === createdChannel.createdByUser) {
+        setActiveChannel({
+          id: createdChannel.id,
+          channelName: createdChannel.name,
+        });
+      }
+    });
+  }, []);
 
  return (
   <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
