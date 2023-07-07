@@ -8,7 +8,7 @@ const ru = {
 
     signup: {
       header: 'Регистрация',
-      nickname: 'Ваш ник',
+      nickname: 'Имя пользователя',
       password: 'Пароль',
       confirmPassword: 'Подтвердите пароль',
       alreadySignedUp: 'Уже есть аккаунт?',
