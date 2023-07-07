@@ -4,14 +4,13 @@ import { useFormik } from 'formik';
 import * as Yup from "yup";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { useContext } from 'react';
+import { useContext, useRef, useEffect } from 'react';
 import CurrentUserContext from '../../../utils/auth-context';
 import { useTranslation } from 'react-i18next';
 
-//TODO: вынести в утилс и возможно сделать через юзэффект
-
 const RegisterForm = () => {
   const { t } = useTranslation();
+  const nameRef = useRef();
 
   const { setUser } = useContext(CurrentUserContext);
   const navigate = useNavigate();
@@ -62,13 +61,18 @@ const RegisterForm = () => {
     },
   });
 
+  useEffect(() => {
+    nameRef.current.focus();
+  }, []);
+
   return (
     <Form onSubmit={formik.handleSubmit}>
       <Form.Group className="mb-3" controlId="formNickname">
         <Form.Label>{t('signup.nickname')}</Form.Label>
         <Form.Control 
           type="text"
-          name="nickname" 
+          name="nickname"
+          ref={nameRef}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.nickname}/>

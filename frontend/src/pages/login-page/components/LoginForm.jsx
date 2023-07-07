@@ -4,12 +4,13 @@ import { useFormik } from 'formik';
 import * as Yup from "yup";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { useContext } from 'react';
+import { useContext, useRef, useEffect } from 'react';
 import CurrentUserContext from '../../../utils/auth-context';
 import { useTranslation } from 'react-i18next';
 
 const LoginForm = () => {
   const { t } = useTranslation();
+  const nameRef = useRef();
 
   const { setUser } = useContext(CurrentUserContext);
   const navigate = useNavigate();
@@ -52,6 +53,10 @@ const LoginForm = () => {
     },
   });
 
+  useEffect(() => {
+    nameRef.current.focus();
+  }, []);
+
   return (
     <Form onSubmit={formik.handleSubmit}>
       <Form.Group className="mb-3" controlId="formNickname">
@@ -59,6 +64,7 @@ const LoginForm = () => {
         <Form.Control 
           type="text"
           name="nickname" 
+          ref={nameRef}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.nickname}/>
