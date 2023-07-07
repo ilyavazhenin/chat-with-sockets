@@ -16,7 +16,7 @@ const ru = {
       signin: 'Войти',
       errors: {
         pswrdsMustMatch: 'Пароли должны совпадать',
-        from3to15symbls: 'От 3 до 15 символов',
+        from3to20symbls: 'От 3 до 20 символов',
         noLessThan6symbls: 'Не менее 6 символов',
         userExists: 'Такой пользователь уже существует',
       },

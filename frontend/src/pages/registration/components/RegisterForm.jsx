@@ -22,8 +22,8 @@ const RegisterForm = () => {
     },
     validationSchema: Yup.object({
       nickname: Yup.string()
-        .min(3, t('signup.errors.from3to15symbls'))
-        .max(20, t('signup.errors.from3to15symbls'))
+        .min(3, t('signup.errors.from3to20symbls'))
+        .max(20, t('signup.errors.from3to20symbls'))
         .required(t('general.errors.requiredField')),
       password: Yup.string()
         .min(6, t('signup.errors.noLessThan6symbls'))
