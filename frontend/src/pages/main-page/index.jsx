@@ -9,22 +9,13 @@ import { actions as channelsActions } from '../../slices/channelsSlice';
 import { actions as messagesActions } from '../../slices/messagesSlice';
 import axios from 'axios';
 import ActiveChannelContext from '../../utils/active-channel-context';
-import { io } from "socket.io-client";
+// import { io } from "socket.io-client";
 import { msgSelectors } from '../../slices/messagesSlice.js';
 // import { selectors } from '../../slices/channelsSlice';
 import { ToastContainer } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import notify from '../../utils/toast-notifier';
-
-export const socket = io.connect('http://localhost:3000', {
-  transportOptions: {
-    polling: {
-      extraHeaders: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-      },
-    },
-  },
-});
+import socket from '../../utils/socket-init';
 
 const Main = () => {
   const { t } = useTranslation();

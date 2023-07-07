@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useDispatch } from "react-redux";
 import { actions as channelsActions } from "../../../slices/channelsSlice";
-import { socket } from "../index";
+import socket from "../../../utils/socket-init";
 import CurrentUserContext from "../../../utils/auth-context";
 
 const ChannelsBox = () => {

@@ -9,7 +9,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 // import { useDispatch } from "react-redux";
 // import { actions as channelsActions } from "../../../slices/channelsSlice";
-import { socket } from "../index";
+import socket from "../../../utils/socket-init";
 // import ActiveChannelContext from "../../../utils/active-channel-context.js";
 import CurrentUserContext from "../../../utils/auth-context";
 import { useTranslation } from 'react-i18next';

@@ -52,7 +52,7 @@ const ru = {
         channelDeleted: 'Канал удалён',
         channelCreated: 'Канал создан',
         channelRenamed: 'Канал переименован',
-        loadError: 'Ошибка загрузки данных',
+        loadError: 'Ошибка соединения',
       },
       messages_other: 'сообщений',
       messages_one: 'сообщение',

@@ -7,7 +7,7 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { socket } from "../index";
+import socket from "../../../utils/socket-init";
 import { useSelector } from "react-redux";
 import { selectors } from "../../../slices/channelsSlice";
 import { useEffect, useRef } from "react";

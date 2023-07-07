@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import { actions as messagesActions } from '../../../slices/messagesSlice';
 import CurrentUserContext from '../../../utils/auth-context.js';
 import Badge from 'react-bootstrap/Badge';
-import { socket } from '../index';
+import socket from "../../../utils/socket-init";
 import { useTranslation } from 'react-i18next';
 import filter from 'leo-profanity';
 

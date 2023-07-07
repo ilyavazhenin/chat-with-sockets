@@ -1,5 +1,5 @@
 import Dropdown from "react-bootstrap/Dropdown";
-import { socket } from "../index.jsx";
+import socket from "../../../utils/socket-init";
 import Modal from "react-bootstrap/Modal"; //TODO: вынести модалку подтверждения в отдельный компонент
 import Button from "react-bootstrap/Button";
 import { useState } from "react";

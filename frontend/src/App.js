@@ -19,6 +19,7 @@ import resources from '../../frontend/src/i18n/index';
 import 'react-toastify/dist/ReactToastify.min.css';
 
 import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
+import socket from './utils/socket-init';
 
 const rollbarConfig = {
   accessToken: 'fb3026f9924146fab176325b87d89453',
@@ -28,6 +29,8 @@ const rollbarConfig = {
 function App() {
   const [user, setUser] = useState({ userName: localStorage.getItem('userName'), token: localStorage.getItem('token')});
   console.log(user, 'user in app');
+
+  socket.connect();
 
   i18n
   .use(initReactI18next)
