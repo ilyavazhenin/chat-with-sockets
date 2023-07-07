@@ -77,6 +77,7 @@ const RenameChannelModal = (props) => {
               value={formik.values.channelName}
               autoFocus
               ref={inputRef}
+              onKeyDown={e => e.stopPropagation()} // fixes a bootstrap bug ('space' not working)
             />
 
             <Form.Text className="text-danger">
