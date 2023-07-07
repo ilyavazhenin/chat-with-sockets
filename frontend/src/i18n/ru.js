@@ -42,7 +42,7 @@ const ru = {
         renameChannel: 'Переименовать канал',
         deleteChannel: 'Удалить канал',
         areYouSure: 'Уверены?',
-        channelName: 'Название канала',
+        channelName: 'Имя канала',
         addChannel: 'Добавить канал',
         cancel: 'Отменить',
         delete: 'Удалить',
