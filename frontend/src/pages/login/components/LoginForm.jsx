@@ -27,7 +27,6 @@ const LoginForm = () => {
         .required(t('general.errors.requiredField')),
     }),
     onSubmit: async () => {
-      // TODO: вынести потом в отдельную функцию в утилс:
       try {
         const response = await axios.post('/api/v1/login', {
           username: formik.values.nickname,

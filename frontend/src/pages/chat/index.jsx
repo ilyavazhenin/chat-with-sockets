@@ -15,7 +15,7 @@ import ActiveChannelContext from '../../utils/active-channel-context';
 import notify from '../../utils/toast-notifier';
 import socket from '../../utils/socket-init';
 
-const Main = () => {
+const ChatMain = () => {
   const { t } = useTranslation();
 
   const navigate = useNavigate();
@@ -23,7 +23,6 @@ const Main = () => {
   const dispatch = useDispatch();
   const [activeChannel, setActiveChannel] = useState({ id: 1, channelName: 'general' });
   const messages = useSelector(msgSelectors.selectAll);
-  // const channels = useSelector(selectors.selectAll);
 
   socket.on('removeChannel', (data) => {
     const messagesIdsToDelete = messages
@@ -56,16 +55,12 @@ const Main = () => {
   useEffect(() => {
     if (!user.userName) navigate('/login');
     else {
-      // TODO: вынести в инстанс аксиоса в утилс и потом реиспользовать
-
       const response = axios({ method: 'get', url: '/api/v1/data', headers: { Authorization: `Bearer ${user.token}` } });
       response.then((data) => {
         dispatch(channelsActions.addChannels(data.data.channels));
         dispatch(messagesActions.addMessages(data.data.messages));
-        console.log('ONLY ON FIRST RENDER');
       })
-        .catch((err) => {
-          console.log(err, 'oops, ERROR in Main in useEffect!');
+        .catch(() => {
           notify.onLoadingDataError(t('chat.toast.loadError'));
         });
     }
@@ -88,4 +83,4 @@ const Main = () => {
   );
 };
 
-export default Main;
+export default ChatMain;

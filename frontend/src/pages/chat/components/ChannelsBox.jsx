@@ -4,11 +4,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { selectors, actions as channelsActions } from '../../../slices/channelsSlice.js';
 import ActiveChannelContext from '../../../utils/active-channel-context.js';
-import AddChannelButton from './ChannelModal.jsx';
-import ChannelControlBtn from './ChannelControlBtn.jsx';
+import AddChannelBtn from '../../../shared-components/add-channel/AddChannelBtn.jsx';
+import ChannelControlDropdown from './ChannelControlDroprown.jsx';
 
-import socket from '../../../utils/socket-init';
-import CurrentUserContext from '../../../utils/auth-context';
+import socket from '../../../utils/socket-init.js';
+import CurrentUserContext from '../../../utils/auth-context.js';
 
 const ChannelsBox = () => {
   const { user } = useContext(CurrentUserContext);
@@ -23,11 +23,8 @@ const ChannelsBox = () => {
 
   const isChannelActive = (currentIterId) => activeChannel.id === currentIterId;
 
-  console.log(channels, 'channels!');
-
   useEffect(() => {
     socket.on('newChannel', (createdChannel) => {
-      console.log(createdChannel, 'getting channel obj from server');
       dispatch(channelsActions.addChannel(createdChannel));
       if (user.userName === createdChannel.createdByUser) {
         setActiveChannel({
@@ -42,11 +39,10 @@ const ChannelsBox = () => {
     <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
       <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
         <b>{t('chat.channelsHeader')}</b>
-        <AddChannelButton />
+        <AddChannelBtn />
       </div>
       <ul id="channels-box" className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">
         { channels.map((channel) => (
-        // TODO: УБРАТЬ В ОТДЕЛЬНЫЙ КОМПОНЕНТ элемент канала в списке
           <li key={channel.id} className="nav-item w-100">
             <div role="group" className="d-flex dropdown btn-group">
               <button
@@ -62,7 +58,7 @@ const ChannelsBox = () => {
               {
                 channel.removable
                   ? (
-                    <ChannelControlBtn
+                    <ChannelControlDropdown
                       active={isChannelActive(channel.id)}
                       channelId={channel.id}
                     />

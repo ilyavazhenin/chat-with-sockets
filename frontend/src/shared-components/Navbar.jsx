@@ -1,13 +1,14 @@
 import { useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import CurrentUserContext from '../../../utils/auth-context';
+import CurrentUserContext from '../utils/auth-context';
 
 const Navbar = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { setUser } = useContext(CurrentUserContext);
   const currentLocation = useLocation();
+
   const logout = () => {
     localStorage.removeItem('userName');
     localStorage.removeItem('token');

@@ -9,7 +9,7 @@ import filter from 'leo-profanity';
 import { msgSelectors, actions as messagesActions } from '../../../slices/messagesSlice.js';
 import ActiveChannelContext from '../../../utils/active-channel-context.js';
 import CurrentUserContext from '../../../utils/auth-context.js';
-import socket from '../../../utils/socket-init';
+import socket from '../../../utils/socket-init.js';
 
 const MessagesBox = () => {
   const { t } = useTranslation();
@@ -20,12 +20,11 @@ const MessagesBox = () => {
   const [socketError, setSocketError] = useState({ message: '' });
 
   const dispatch = useDispatch();
-
   const messages = useSelector(msgSelectors.selectAll);
+
   const { activeChannel } = useContext(ActiveChannelContext);
   const { user } = useContext(CurrentUserContext);
 
-  console.log(messages, 'messages!');
   const msgRef = useRef();
   const bottomRef = useRef();
   const msgsCount = messages.filter((msg) => msg.relatedChannelId === activeChannel.id).length;
@@ -41,7 +40,6 @@ const MessagesBox = () => {
         relatedChannelId: activeChannel.id,
         user: user.userName,
       },
-      (response) => console.log(response.status, 'RESPONSE STATUS'),
     );
     socket.on('connect_error', () => {
       setSocketError({ message: t('chat.errors.socketError') });
@@ -52,7 +50,6 @@ const MessagesBox = () => {
 
   useEffect(() => {
     socket.on('newMessage', (messageWithId) => {
-      console.log(messageWithId, 'getting msg obj from server');
       dispatch(messagesActions.addMessage(messageWithId));
     });
   }, []);

@@ -33,7 +33,6 @@ const RegisterForm = () => {
         .oneOf([Yup.ref('password')], t('signup.errors.pswrdsMustMatch')),
     }),
     onSubmit: async () => {
-      // TODO: вынести потом в отдельную функцию в утилс:
       try {
         const response = await axios.post('/api/v1/signup', {
           username: formik.values.nickname,
@@ -51,7 +50,6 @@ const RegisterForm = () => {
         }
       } catch (e) {
         setUser(null);
-        console.log(e, 'ERROR');
         const errors = {};
         if (e.response.status === 409) errors.nickname = t('signup.errors.userExists');
         else errors.nickname = t('general.errors.badNetwork');

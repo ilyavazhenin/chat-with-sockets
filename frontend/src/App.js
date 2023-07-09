@@ -9,11 +9,11 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
 
-import NotFound from './pages/404-page';
-import LoginCard from './pages/login-page';
+import NotFound from './pages/404';
+import LoginCard from './pages/login';
 import RegisterCard from './pages/registration';
-import Main from './pages/main-page';
-import Navbar from './pages/main-page/components/Navbar';
+import ChatMain from './pages/chat';
+import Navbar from './shared-components/Navbar';
 
 import CurrentUserContext from './utils/auth-context';
 
@@ -31,15 +31,12 @@ const rollbarConfig = {
 
 const App = () => {
   const [user, setUser] = useState({ userName: localStorage.getItem('userName'), token: localStorage.getItem('token') });
-  console.log(user, 'user in app');
-
   socket.connect();
 
   i18n
     .use(initReactI18next)
     .init({
       fallbackLng: 'ru',
-      debug: true,
       resources,
       interpolation: {
         escapeValue: false,
@@ -54,7 +51,7 @@ const App = () => {
             <BrowserRouter>
               <Navbar />
               <Routes>
-                <Route path="/" element={<Main />} />
+                <Route path="/" element={<ChatMain />} />
                 <Route path="login" element={<LoginCard />} />
                 <Route path="signup" element={<RegisterCard />} />
                 <Route path="*" element={<NotFound />} />
