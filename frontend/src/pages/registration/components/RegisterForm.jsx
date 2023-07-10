@@ -2,18 +2,19 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useContext, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import CurrentUserContext from '../../../utils/auth-context';
+import handleReg from '../utils/handleReg';
 
 const RegisterForm = () => {
   const { t } = useTranslation();
   const nameRef = useRef();
-
   const { setUser } = useContext(CurrentUserContext);
   const navigate = useNavigate();
+  const requiredError = t('general.errors.requiredField');
+  const from3to20symbError = t('signup.errors.from3to20symbls');
 
   const formik = useFormik({
     initialValues: {
@@ -22,40 +23,17 @@ const RegisterForm = () => {
     },
     validationSchema: Yup.object({
       nickname: Yup.string()
-        .min(3, t('signup.errors.from3to20symbls'))
-        .max(20, t('signup.errors.from3to20symbls'))
-        .required(t('general.errors.requiredField')),
+        .min(3, from3to20symbError)
+        .max(20, from3to20symbError)
+        .required(requiredError),
       password: Yup.string()
         .min(6, t('signup.errors.noLessThan6symbls'))
-        .required(t('general.errors.requiredField')),
+        .required(requiredError),
       confirmPassword: Yup.string()
-        .required(t('general.errors.requiredField'))
+        .required(requiredError)
         .oneOf([Yup.ref('password')], t('signup.errors.pswrdsMustMatch')),
     }),
-    onSubmit: async () => {
-      try {
-        const response = await axios.post('/api/v1/signup', {
-          username: formik.values.nickname,
-          password: formik.values.password,
-        });
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('userName', formik.values.nickname);
-
-        if (response.status === 201) {
-          setUser({
-            userName: localStorage.getItem('userName'),
-            token: localStorage.getItem('token'),
-          });
-          navigate('/');
-        }
-      } catch (e) {
-        setUser(null);
-        const errors = {};
-        if (e.response.status === 409) errors.nickname = t('signup.errors.userExists');
-        else errors.nickname = t('general.errors.badNetwork');
-        formik.setErrors(errors);
-      }
-    },
+    onSubmit: async () => handleReg(formik, setUser, navigate, t),
   });
 
   useEffect(() => {

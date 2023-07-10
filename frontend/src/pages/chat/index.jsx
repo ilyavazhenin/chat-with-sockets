@@ -14,6 +14,7 @@ import { actions as messagesActions, msgSelectors } from '../../slices/messagesS
 import ActiveChannelContext from '../../utils/active-channel-context';
 import notify from '../../utils/toast-notifier';
 import socket from '../../utils/socket-init';
+import routes from '../../utils/routes';
 
 const ChatMain = () => {
   const { t } = useTranslation();
@@ -55,7 +56,7 @@ const ChatMain = () => {
   useEffect(() => {
     if (!user.userName) navigate('/login');
     else {
-      const response = axios({ method: 'get', url: '/api/v1/data', headers: { Authorization: `Bearer ${user.token}` } });
+      const response = axios({ method: 'get', url: routes.data, headers: { Authorization: `Bearer ${user.token}` } });
       response.then((data) => {
         dispatch(channelsActions.addChannels(data.data.channels));
         dispatch(messagesActions.addMessages(data.data.messages));

@@ -16,12 +16,9 @@ import ChatMain from './pages/chat';
 import Navbar from './shared-components/Navbar';
 
 import CurrentUserContext from './utils/auth-context';
-
 import store from './slices/index';
-
 import resources from './i18n/index';
 import 'react-toastify/dist/ReactToastify.min.css';
-
 import socket from './utils/socket-init';
 
 const rollbarConfig = {
@@ -32,7 +29,6 @@ const rollbarConfig = {
 const App = () => {
   const [user, setUser] = useState({ userName: localStorage.getItem('userName'), token: localStorage.getItem('token') });
   socket.connect();
-
   i18n
     .use(initReactI18next)
     .init({

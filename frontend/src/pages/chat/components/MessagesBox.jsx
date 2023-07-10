@@ -32,7 +32,6 @@ const MessagesBox = () => {
   const handleMsgSubmit = (e) => {
     e.preventDefault();
     const currentMsg = filter.clean(msgRef.current.value);
-    socket.connect();
     socket.emit(
       'newMessage',
       {

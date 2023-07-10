@@ -36,7 +36,6 @@ const RenameChannelModal = (props) => {
         ...currentchannel,
         name: values.channelName,
       };
-      socket.connect();
       socket.emit('renameChannel', renamedChannel);
       onHide();
       formik.resetForm();

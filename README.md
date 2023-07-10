@@ -1,5 +1,5 @@
 # 💬 A slack-alike chat 
-[![Actions Status](https://github.com/ilyavazhenin/frontend-project-12/workflows/hexlet-check/badge.svg)](https://github.com/ilyavazhenin/frontend-project-12/actions)
+[![Actions Status](https://github.com/ilyavazhenin/frontend-project-12/workflows/hexlet-check/badge.svg)](https://github.com/ilyavazhenin/frontend-project-12/actions) [![eslint test](https://github.com/ilyavazhenin/frontend-project-12/actions/workflows/eslint.yml/badge.svg)](https://github.com/ilyavazhenin/frontend-project-12/actions/workflows/eslint.yml) [![Maintainability](https://api.codeclimate.com/v1/badges/05c782abb4c2f596a894/maintainability)](https://codeclimate.com/github/ilyavazhenin/frontend-project-12/maintainability)
 
 A minimalistic chat based on websockets. Core features are: messaging and channels (with couple of default ones and creating, renaming and deleting new ones).
 

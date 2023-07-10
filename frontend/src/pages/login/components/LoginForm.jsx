@@ -2,18 +2,18 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useContext, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import CurrentUserContext from '../../../utils/auth-context';
+import handleLogin from '../utils/handleLogin';
 
 const LoginForm = () => {
   const { t } = useTranslation();
   const nameRef = useRef();
-
   const { setUser } = useContext(CurrentUserContext);
   const navigate = useNavigate();
+  const requiredError = t('general.errors.requiredField');
 
   const formik = useFormik({
     initialValues: {
@@ -22,34 +22,11 @@ const LoginForm = () => {
     },
     validationSchema: Yup.object({
       nickname: Yup.string()
-        .required(t('general.errors.requiredField')),
+        .required(requiredError),
       password: Yup.string()
-        .required(t('general.errors.requiredField')),
+        .required(requiredError),
     }),
-    onSubmit: async () => {
-      try {
-        const response = await axios.post('/api/v1/login', {
-          username: formik.values.nickname,
-          password: formik.values.password,
-        });
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('userName', formik.values.nickname);
-
-        if (response.status === 200) {
-          setUser({
-            userName: localStorage.getItem('userName'),
-            token: localStorage.getItem('token'),
-          });
-          navigate('/');
-        }
-      } catch (e) {
-        setUser(null);
-        const errors = {};
-        if (e.code === 'ERR_BAD_REQUEST') errors.password = t('login.errors.wrongCredentials');
-        else errors.password = t('general.errors.badNetwork');
-        formik.setErrors(errors);
-      }
-    },
+    onSubmit: async () => handleLogin(formik, setUser, navigate, t),
   });
 
   useEffect(() => {

@@ -15,6 +15,7 @@ const AddChannelModal = (props) => {
   const { t } = useTranslation();
   const { user } = useContext(CurrentUserContext);
   const { onHide, show, allchannels } = props;
+  const from3to20symbError = t('chat.errors.from3to20symbls');
 
   const formik = useFormik({
     initialValues: {
@@ -22,8 +23,8 @@ const AddChannelModal = (props) => {
     },
     validationSchema: Yup.object({
       channelName: Yup.string()
-        .min(3, t('chat.errors.from3to20symbls'))
-        .max(20, t('chat.errors.from3to20symbls'))
+        .min(3, from3to20symbError)
+        .max(20, from3to20symbError)
         .required(t('general.errors.requiredField'))
         .notOneOf(allchannels, t('chat.errors.uniqueChannel')),
     }),
@@ -32,7 +33,6 @@ const AddChannelModal = (props) => {
         name: values.channelName,
         createdByUser: user.userName,
       };
-      socket.connect();
       await socket.emit('newChannel', newChannel, () => {});
       onHide();
       formik.resetForm();
