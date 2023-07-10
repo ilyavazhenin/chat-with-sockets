@@ -45,4 +45,4 @@ See other options and commands in **Makefile**.
 
 
 ## 🕸️ Play around with deployed instance of the Chat:
-*Here's gonna be a link for Render . com once I figure it out :D*
+https://a-slack-alike-chat-pet.onrender.com
