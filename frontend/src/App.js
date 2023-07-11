@@ -1,6 +1,5 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
 import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
@@ -18,12 +17,11 @@ import Navbar from './shared-components/Navbar';
 import CurrentUserContext from './utils/auth-context';
 import store from './slices/index';
 import resources from './i18n/index';
-import 'react-toastify/dist/ReactToastify.min.css';
 import socket from './utils/socket-init';
 
-const rollbarConfig = {
-  accessToken: 'fb3026f9924146fab176325b87d89453',
-  environment: 'testenv',
+const rollbarConfig = { // only for production env to watch for frontend errors
+  accessToken: process.env.REACT_APP_ROLLBAR_TOKEN,
+  environment: 'prod',
 };
 
 const App = () => {
