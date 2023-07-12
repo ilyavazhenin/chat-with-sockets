@@ -46,8 +46,8 @@ const MessagesBox = (props) => {
   };
 
   useEffect(() => {
-    socket.on('newMessage', (messageWithId) => {
-      dispatch(messagesActions.addMessage(messageWithId));
+    socket.on('newMessage', async (messageWithId) => {
+      await dispatch(messagesActions.addMessage(messageWithId));
     });
   }, []);
 
