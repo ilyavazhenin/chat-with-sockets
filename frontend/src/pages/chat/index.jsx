@@ -16,7 +16,7 @@ import notify from '../../utils/toast-notifier';
 import routes from '../../utils/routes';
 
 const ChatMain = (props) => {
-  const { socket, socketError } = props;
+  const { socket } = props;
   const { t } = useTranslation();
 
   const navigate = useNavigate();
@@ -50,8 +50,15 @@ const ChatMain = (props) => {
       }
     });
 
-    socket.on('newChannel', () => {
-      notify.onChannelCreated(t('chat.toast.channelCreated'));
+    socket.on('newChannel', (createdChannel) => {
+      dispatch(channelsActions.addChannel(createdChannel));
+      if (user.userName === createdChannel.createdByUser) {
+        setActiveChannel({
+          id: createdChannel.id,
+          channelName: createdChannel.name,
+        });
+        notify.onChannelCreated(t('chat.toast.channelCreated'));
+      }
     });
 
     socket.on('newMessage', (messageWithId) => {
@@ -81,7 +88,7 @@ const ChatMain = (props) => {
           <div className="row h-100 bg-white flex-md-row">
             <ActiveChannelContext.Provider value={{ activeChannel, setActiveChannel }}>
               <ChannelsBox socket={socket} />
-              <MessagesBox socket={socket} socketError={socketError} />
+              <MessagesBox socket={socket} />
             </ActiveChannelContext.Provider>
           </div>
         </div>

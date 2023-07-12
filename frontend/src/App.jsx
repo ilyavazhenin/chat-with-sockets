@@ -10,6 +10,7 @@ import { initReactI18next } from 'react-i18next';
 import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
 import filter from 'leo-profanity';
 import { io } from 'socket.io-client';
+import notify from './utils/toast-notifier';
 
 import NotFound from './pages/404';
 import LoginCard from './pages/login';
@@ -28,7 +29,7 @@ const rollbarConfig = { // only for production env to watch for frontend errors
 
 const App = () => {
   const [user, setUser] = useState({ userName: localStorage.getItem('userName'), token: localStorage.getItem('token') });
-  const [socketError, setSocketError] = useState({ message: '' });
+  // const [socketError, setSocketError] = useState({ message: '' });
   const socket = io('localhost:3000', {
     autoConnect: false,
   });
@@ -56,7 +57,7 @@ const App = () => {
 
   useEffect(() => {
     socket.on('connect_error', () => {
-      setSocketError({ message: i18inst.t('chat.errors.socketError') });
+      notify.onLoadingDataError(i18inst.t('chat.toast.loadError'));
     });
   }, []);
 
@@ -68,7 +69,7 @@ const App = () => {
             <BrowserRouter>
               <Navbar />
               <Routes>
-                <Route path="/" element={<ChatMain socket={socket} socketError={socketError} />} />
+                <Route path="/" element={<ChatMain socket={socket} />} />
                 <Route path="login" element={<LoginCard />} />
                 <Route path="signup" element={<RegisterCard />} />
                 <Route path="*" element={<NotFound />} />

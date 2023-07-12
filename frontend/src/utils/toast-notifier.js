@@ -29,6 +29,7 @@ const onChannelRenamed = (msg) => toast(msg, {
 const onLoadingDataError = (msg) => toast.error(msg, {
   toastId: 'loadError',
   ...toastSettings,
+  autoClose: 3000,
 });
 
 const notify = {

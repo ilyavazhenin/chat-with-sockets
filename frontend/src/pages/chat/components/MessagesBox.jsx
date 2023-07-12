@@ -4,7 +4,7 @@ import {
   // useState,
 } from 'react';
 import { useSelector } from 'react-redux';
-import Badge from 'react-bootstrap/Badge';
+// import Badge from 'react-bootstrap/Badge';
 import { useTranslation } from 'react-i18next';
 import filter from 'leo-profanity';
 import { msgSelectors } from '../../../slices/messagesSlice.js';
@@ -12,7 +12,7 @@ import ActiveChannelContext from '../../../utils/active-channel-context.js';
 import CurrentUserContext from '../../../utils/auth-context.js';
 
 const MessagesBox = (props) => {
-  const { socket, socketError } = props;
+  const { socket } = props;
   const { t } = useTranslation();
 
   // const dispatch = useDispatch();
@@ -94,7 +94,8 @@ const MessagesBox = (props) => {
             </div>
           </form>
         </div>
-        {socketError.message.length ? <Badge bg="danger">{socketError.message}</Badge> : null}
+        {/* {socketError.message.length ?
+          <Badge bg="danger">{socketError.message}</Badge> : null} */}
       </div>
     </div>
   );

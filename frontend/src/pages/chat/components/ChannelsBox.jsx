@@ -1,17 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useContext, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useContext } from 'react';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { selectors, actions as channelsActions } from '../../../slices/channelsSlice.js';
+import { selectors } from '../../../slices/channelsSlice.js';
 import ActiveChannelContext from '../../../utils/active-channel-context.js';
 import AddChannelBtn from '../../../shared-components/add-channel/AddChannelBtn.jsx';
 import ChannelControlDropdown from './ChannelControlDroprown.jsx';
-import CurrentUserContext from '../../../utils/auth-context.js';
+// import CurrentUserContext from '../../../utils/auth-context.js';
 
 const ChannelsBox = (props) => {
   const { socket } = props;
-  const { user } = useContext(CurrentUserContext);
-  const dispatch = useDispatch();
+  // const { user } = useContext(CurrentUserContext);
+  // const dispatch = useDispatch();
 
   const { t } = useTranslation();
   const channels = useSelector(selectors.selectAll);
@@ -22,17 +22,17 @@ const ChannelsBox = (props) => {
 
   const isChannelActive = (currentIterId) => activeChannel.id === currentIterId;
 
-  useEffect(() => {
-    socket.on('newChannel', (createdChannel) => {
-      dispatch(channelsActions.addChannel(createdChannel));
-      if (user.userName === createdChannel.createdByUser) {
-        setActiveChannel({
-          id: createdChannel.id,
-          channelName: createdChannel.name,
-        });
-      }
-    });
-  }, []);
+  // useEffect(() => {
+  //   socket.on('newChannel', (createdChannel) => {
+  //     dispatch(channelsActions.addChannel(createdChannel));
+  //     if (user.userName === createdChannel.createdByUser) {
+  //       setActiveChannel({
+  //         id: createdChannel.id,
+  //         channelName: createdChannel.name,
+  //       });
+  //     }
+  //   });
+  // }, []);
 
   return (
     <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
