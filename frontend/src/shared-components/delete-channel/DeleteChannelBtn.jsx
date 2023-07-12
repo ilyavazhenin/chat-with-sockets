@@ -5,7 +5,7 @@ import DeleteChannelModal from './DeleteChannelModal';
 const DeleteChannelBtn = (props) => {
   const { t } = useTranslation();
 
-  const { channelId } = props;
+  const { channelId, socket } = props;
   const [modalShow, setModalShow] = useState(false);
 
   return (
@@ -21,6 +21,7 @@ const DeleteChannelBtn = (props) => {
         show={modalShow}
         onHide={() => setModalShow(false)}
         channelId={channelId}
+        socket={socket}
       />
     </>
   );

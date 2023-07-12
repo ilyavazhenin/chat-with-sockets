@@ -6,11 +6,10 @@ import { selectors, actions as channelsActions } from '../../../slices/channelsS
 import ActiveChannelContext from '../../../utils/active-channel-context.js';
 import AddChannelBtn from '../../../shared-components/add-channel/AddChannelBtn.jsx';
 import ChannelControlDropdown from './ChannelControlDroprown.jsx';
-
-import socket from '../../../utils/socket-init.js';
 import CurrentUserContext from '../../../utils/auth-context.js';
 
-const ChannelsBox = () => {
+const ChannelsBox = (props) => {
+  const { socket } = props;
   const { user } = useContext(CurrentUserContext);
   const dispatch = useDispatch();
 
@@ -39,7 +38,7 @@ const ChannelsBox = () => {
     <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
       <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
         <b>{t('chat.channelsHeader')}</b>
-        <AddChannelBtn />
+        <AddChannelBtn socket={socket} />
       </div>
       <ul id="channels-box" className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">
         { channels.map((channel) => (
@@ -61,6 +60,7 @@ const ChannelsBox = () => {
                     <ChannelControlDropdown
                       active={isChannelActive(channel.id)}
                       channelId={channel.id}
+                      socket={socket}
                     />
                   )
                   : null

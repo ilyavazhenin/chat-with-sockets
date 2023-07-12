@@ -9,13 +9,10 @@ import filter from 'leo-profanity';
 import { msgSelectors, actions as messagesActions } from '../../../slices/messagesSlice.js';
 import ActiveChannelContext from '../../../utils/active-channel-context.js';
 import CurrentUserContext from '../../../utils/auth-context.js';
-import socket from '../../../utils/socket-init.js';
 
-const MessagesBox = () => {
+const MessagesBox = (props) => {
+  const { socket } = props;
   const { t } = useTranslation();
-
-  filter.add(filter.getDictionary('en'));
-  filter.add(filter.getDictionary('ru'));
 
   const [socketError, setSocketError] = useState({ message: '' });
 
@@ -29,10 +26,10 @@ const MessagesBox = () => {
   const bottomRef = useRef();
   const msgsCount = messages.filter((msg) => msg.relatedChannelId === activeChannel.id).length;
 
-  const handleMsgSubmit = (e) => {
+  const handleMsgSubmit = async (e) => {
     e.preventDefault();
     const currentMsg = filter.clean(msgRef.current.value);
-    socket.emit(
+    await socket.emit(
       'newMessage',
       {
         message: currentMsg,
@@ -40,6 +37,7 @@ const MessagesBox = () => {
         user: user.userName,
       },
     );
+
     socket.on('connect_error', () => {
       setSocketError({ message: t('chat.errors.socketError') });
     });

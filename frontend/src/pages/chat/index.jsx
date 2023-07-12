@@ -13,10 +13,10 @@ import { actions as channelsActions } from '../../slices/channelsSlice';
 import { actions as messagesActions, msgSelectors } from '../../slices/messagesSlice';
 import ActiveChannelContext from '../../utils/active-channel-context';
 import notify from '../../utils/toast-notifier';
-import socket from '../../utils/socket-init';
 import routes from '../../utils/routes';
 
-const ChatMain = () => {
+const ChatMain = (props) => {
+  const { socket } = props;
   const { t } = useTranslation();
 
   const navigate = useNavigate();
@@ -74,8 +74,8 @@ const ChatMain = () => {
         <div className="container h-100 my-4 overflow-hidden rounded shadow">
           <div className="row h-100 bg-white flex-md-row">
             <ActiveChannelContext.Provider value={{ activeChannel, setActiveChannel }}>
-              <ChannelsBox />
-              <MessagesBox />
+              <ChannelsBox socket={socket} />
+              <MessagesBox socket={socket} />
             </ActiveChannelContext.Provider>
           </div>
         </div>

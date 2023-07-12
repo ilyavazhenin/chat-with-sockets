@@ -7,7 +7,7 @@ import RenameChannelModal from './RenameChannelModal';
 
 const RenameChannelButton = (props) => {
   const { t } = useTranslation();
-  const { channelId } = props;
+  const { channelId, socket } = props;
   const [modalShow, setModalShow] = useState(false);
   const channels = useSelector(selectors.selectAll);
   const currentChannel = channels.find((el) => el.id === channelId);
@@ -27,6 +27,7 @@ const RenameChannelButton = (props) => {
         onHide={() => setModalShow(false)}
         currentchannel={currentChannel}
         allchannels={channelsNames}
+        socket={socket}
       />
     </>
   );

@@ -8,13 +8,17 @@ import Row from 'react-bootstrap/Row';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
-import socket from '../../utils/socket-init';
 import CurrentUserContext from '../../utils/auth-context';
 
 const AddChannelModal = (props) => {
   const { t } = useTranslation();
   const { user } = useContext(CurrentUserContext);
-  const { onHide, show, allchannels } = props;
+  const {
+    onHide,
+    show,
+    allchannels,
+    socket,
+  } = props;
   const from3to20symbError = t('chat.errors.from3to20symbls');
 
   const formik = useFormik({

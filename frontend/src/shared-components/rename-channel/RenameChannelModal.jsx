@@ -8,7 +8,6 @@ import Row from 'react-bootstrap/Row';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
-import socket from '../../utils/socket-init';
 
 const RenameChannelModal = (props) => {
   const { t } = useTranslation();
@@ -18,6 +17,7 @@ const RenameChannelModal = (props) => {
     allchannels,
     onHide,
     show,
+    socket,
   } = props;
 
   const formik = useFormik({
@@ -31,12 +31,12 @@ const RenameChannelModal = (props) => {
         .required(t('general.errors.requiredField'))
         .notOneOf(allchannels, t('chat.errors.uniqueChannel')),
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       const renamedChannel = {
         ...currentchannel,
         name: values.channelName,
       };
-      socket.emit('renameChannel', renamedChannel);
+      await socket.emit('renameChannel', renamedChannel);
       onHide();
       formik.resetForm();
     },
