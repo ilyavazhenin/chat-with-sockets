@@ -28,6 +28,7 @@ const rollbarConfig = { // only for production env to watch for frontend errors
 
 const App = () => {
   const [user, setUser] = useState({ userName: localStorage.getItem('userName'), token: localStorage.getItem('token') });
+  const [socketError, setSocketError] = useState({ message: '' });
   const socket = io('localhost:3000', {
     autoConnect: false,
   });
@@ -53,6 +54,12 @@ const App = () => {
     };
   }, []);
 
+  useEffect(() => {
+    socket.on('connect_error', () => {
+      setSocketError({ message: i18inst.t('chat.errors.socketError') });
+    });
+  }, []);
+
   return (
     <RollbarProvider config={rollbarConfig}>
       <ErrorBoundary>
@@ -61,7 +68,7 @@ const App = () => {
             <BrowserRouter>
               <Navbar />
               <Routes>
-                <Route path="/" element={<ChatMain socket={socket} />} />
+                <Route path="/" element={<ChatMain socket={socket} socketError={socketError} />} />
                 <Route path="login" element={<LoginCard />} />
                 <Route path="signup" element={<RegisterCard />} />
                 <Route path="*" element={<NotFound />} />

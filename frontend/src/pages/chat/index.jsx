@@ -16,7 +16,7 @@ import notify from '../../utils/toast-notifier';
 import routes from '../../utils/routes';
 
 const ChatMain = (props) => {
-  const { socket } = props;
+  const { socket, socketError } = props;
   const { t } = useTranslation();
 
   const navigate = useNavigate();
@@ -25,33 +25,39 @@ const ChatMain = (props) => {
   const [activeChannel, setActiveChannel] = useState({ id: 1, channelName: 'general' });
   const messages = useSelector(msgSelectors.selectAll);
 
-  socket.on('removeChannel', (data) => {
-    const messagesIdsToDelete = messages
-      .filter((msg) => msg.relatedChannelId === data.id)
-      .map((m) => m.id);
-    dispatch(channelsActions.deleteChannel(data.id));
-    dispatch(messagesActions.deleteMessagesByChannel(messagesIdsToDelete));
-    setActiveChannel({ id: 1, channelName: 'general' });
-    notify.onChannelRemoved(t('chat.toast.channelDeleted'));
-  });
+  useEffect(() => {
+    socket.on('removeChannel', (data) => {
+      const messagesIdsToDelete = messages
+        .filter((msg) => msg.relatedChannelId === data.id)
+        .map((m) => m.id);
+      dispatch(channelsActions.deleteChannel(data.id));
+      dispatch(messagesActions.deleteMessagesByChannel(messagesIdsToDelete));
+      setActiveChannel({ id: 1, channelName: 'general' });
+      notify.onChannelRemoved(t('chat.toast.channelDeleted'));
+    });
 
-  socket.on('renameChannel', (renamedChannel) => {
-    dispatch(channelsActions.renameChannel({
-      id: renamedChannel.id,
-      changes: { name: renamedChannel.name },
-    }));
-    notify.onChannelRenamed(t('chat.toast.channelRenamed'));
-    if (activeChannel.id === renamedChannel.id) {
-      setActiveChannel({
+    socket.on('renameChannel', (renamedChannel) => {
+      dispatch(channelsActions.renameChannel({
         id: renamedChannel.id,
-        channelName: renamedChannel.name,
-      });
-    }
-  });
+        changes: { name: renamedChannel.name },
+      }));
+      notify.onChannelRenamed(t('chat.toast.channelRenamed'));
+      if (activeChannel.id === renamedChannel.id) {
+        setActiveChannel({
+          id: renamedChannel.id,
+          channelName: renamedChannel.name,
+        });
+      }
+    });
 
-  socket.on('newChannel', () => {
-    notify.onChannelCreated(t('chat.toast.channelCreated'));
-  });
+    socket.on('newChannel', () => {
+      notify.onChannelCreated(t('chat.toast.channelCreated'));
+    });
+
+    socket.on('newMessage', (messageWithId) => {
+      dispatch(messagesActions.addMessage(messageWithId));
+    });
+  }, []);
 
   useEffect(() => {
     if (!user.userName) navigate('/login');
@@ -75,7 +81,7 @@ const ChatMain = (props) => {
           <div className="row h-100 bg-white flex-md-row">
             <ActiveChannelContext.Provider value={{ activeChannel, setActiveChannel }}>
               <ChannelsBox socket={socket} />
-              <MessagesBox socket={socket} />
+              <MessagesBox socket={socket} socketError={socketError} />
             </ActiveChannelContext.Provider>
           </div>
         </div>

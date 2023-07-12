@@ -1,22 +1,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
-  useContext, useEffect, useRef, useState,
+  useContext, useEffect, useRef,
+  // useState,
 } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Badge from 'react-bootstrap/Badge';
 import { useTranslation } from 'react-i18next';
 import filter from 'leo-profanity';
-import { msgSelectors, actions as messagesActions } from '../../../slices/messagesSlice.js';
+import { msgSelectors } from '../../../slices/messagesSlice.js';
 import ActiveChannelContext from '../../../utils/active-channel-context.js';
 import CurrentUserContext from '../../../utils/auth-context.js';
 
 const MessagesBox = (props) => {
-  const { socket } = props;
+  const { socket, socketError } = props;
   const { t } = useTranslation();
 
-  const [socketError, setSocketError] = useState({ message: '' });
-
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const messages = useSelector(msgSelectors.selectAll);
 
   const { activeChannel } = useContext(ActiveChannelContext);
@@ -38,18 +37,12 @@ const MessagesBox = (props) => {
       },
     );
 
-    socket.on('connect_error', () => {
-      setSocketError({ message: t('chat.errors.socketError') });
-    });
-    msgRef.current.value = '';
-    setSocketError({ message: '' });
+    // socket.on('connect_error', () => {
+    //   setSocketError({ message: t('chat.errors.socketError') });
+    // });
+    msgRef.current.value = ''; // TODO: использовать формик и бутстрап? и заменить на resetForm
+    // setSocketError({ message: '' });
   };
-
-  useEffect(() => {
-    socket.on('newMessage', async (messageWithId) => {
-      await dispatch(messagesActions.addMessage(messageWithId));
-    });
-  }, []);
 
   useEffect(() => {
     msgRef.current.focus();
