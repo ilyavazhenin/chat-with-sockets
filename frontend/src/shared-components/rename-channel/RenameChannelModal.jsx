@@ -6,9 +6,9 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import notify from '../../utils/toast-notifier';
+import { addChannelSchema } from '../../utils/yup-schemas';
 
 const RenameChannelModal = (props) => {
   const { t } = useTranslation();
@@ -25,13 +25,7 @@ const RenameChannelModal = (props) => {
     initialValues: {
       channelName: currentchannel.name,
     },
-    validationSchema: Yup.object({
-      channelName: Yup.string()
-        .min(3, t('chat.errors.from3to20symbls'))
-        .max(20, t('chat.errors.from3to20symbls'))
-        .required(t('general.errors.requiredField'))
-        .notOneOf(allchannels, t('chat.errors.uniqueChannel')),
-    }),
+    validationSchema: addChannelSchema(allchannels),
     onSubmit: async (values) => {
       const renamedChannel = {
         ...currentchannel,

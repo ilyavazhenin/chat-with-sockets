@@ -5,8 +5,8 @@ import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { Provider } from 'react-redux';
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
+// import i18n from 'i18next';
+// import { initReactI18next } from 'react-i18next';
 import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
 import filter from 'leo-profanity';
 import { io } from 'socket.io-client';
@@ -20,37 +20,26 @@ import Navbar from './shared-components/Navbar';
 
 import CurrentUserContext from './utils/auth-context';
 import store from './slices/index';
-import resources from './i18n/index';
+import { i18inst } from './i18n';
 
 const rollbarConfig = { // only for production env to watch for frontend errors
   accessToken: process.env.REACT_APP_ROLLBAR_TOKEN,
   environment: 'prod',
 };
 
-const i18inst = i18n.createInstance();
-await i18inst
-  .use(initReactI18next)
-  .init({
-    fallbackLng: 'ru',
-    resources,
-    interpolation: {
-      escapeValue: false,
-    },
-  });
+const socket = io('localhost:3000', {
+  autoConnect: false,
+});
 
 const App = () => {
   const [user, setUser] = useState({ userName: localStorage.getItem('userName'), token: localStorage.getItem('token') });
-  const socket = io('localhost:3000', {
-    autoConnect: false,
-  });
-
   filter.add(filter.getDictionary('en'));
   filter.add(filter.getDictionary('ru'));
 
   useEffect(() => {
     socket.connect();
     return () => {
-      socket.disconnect(); // disconnect on unmount
+      socket.disconnect();
     };
   }, []);
 

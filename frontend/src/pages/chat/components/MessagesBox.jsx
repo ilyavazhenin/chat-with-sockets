@@ -57,7 +57,7 @@ const MessagesBox = (props) => {
 
   useEffect(() => {
     bottomRef.current.scrollIntoView();
-  }, [formik.handleSubmit]);
+  });
 
   return (
     <div className="col p-0 h-100">
@@ -103,7 +103,7 @@ const MessagesBox = (props) => {
                 size="sm"
                 type="text"
                 placeholder={t('chat.enterMessage')}
-                value={formik.values.message}
+                value={formik.values.message || ''}
                 onChange={formik.handleChange}
                 ref={msgRef}
               />

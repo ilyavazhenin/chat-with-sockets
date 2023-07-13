@@ -6,10 +6,11 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
+// import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import CurrentUserContext from '../../utils/auth-context';
 import notify from '../../utils/toast-notifier';
+import { addChannelSchema } from '../../utils/yup-schemas';
 
 const AddChannelModal = (props) => {
   const { t } = useTranslation();
@@ -20,19 +21,13 @@ const AddChannelModal = (props) => {
     allchannels,
     socket,
   } = props;
-  const from3to20symbError = t('chat.errors.from3to20symbls');
+  // const from3to20symbError = t('chat.errors.from3to20symbls');
 
   const formik = useFormik({
     initialValues: {
       channelName: '',
     },
-    validationSchema: Yup.object({
-      channelName: Yup.string()
-        .min(3, from3to20symbError)
-        .max(20, from3to20symbError)
-        .required(t('general.errors.requiredField'))
-        .notOneOf(allchannels, t('chat.errors.uniqueChannel')),
-    }),
+    validationSchema: addChannelSchema(allchannels),
     onSubmit: async (values) => {
       const newChannel = {
         name: values.channelName,
@@ -54,6 +49,7 @@ const AddChannelModal = (props) => {
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
+      animation={false}
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">

@@ -1,38 +1,25 @@
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import { useContext, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import CurrentUserContext from '../../../utils/auth-context';
 import handleReg from '../utils/handleReg';
+import { registerSchema } from '../../../utils/yup-schemas';
 
 const RegisterForm = () => {
   const { t } = useTranslation();
   const nameRef = useRef();
   const { setUser } = useContext(CurrentUserContext);
   const navigate = useNavigate();
-  const requiredError = t('general.errors.requiredField');
-  const from3to20symbError = t('signup.errors.from3to20symbls');
 
   const formik = useFormik({
     initialValues: {
       nickname: '',
       password: '',
     },
-    validationSchema: Yup.object({
-      nickname: Yup.string()
-        .min(3, from3to20symbError)
-        .max(20, from3to20symbError)
-        .required(requiredError),
-      password: Yup.string()
-        .min(6, t('signup.errors.noLessThan6symbls'))
-        .required(requiredError),
-      confirmPassword: Yup.string()
-        .required(requiredError)
-        .oneOf([Yup.ref('password')], t('signup.errors.pswrdsMustMatch')),
-    }),
+    validationSchema: registerSchema(),
     onSubmit: async () => handleReg(formik, setUser, navigate, t),
   });
 
