@@ -23,9 +23,7 @@ const MessagesBox = (props) => {
 
   const msgRef = useRef();
   const bottomRef = useRef();
-  const msgsCount = messages.filter(
-    (msg) => msg.relatedChannelId === activeChannel.id,
-  ).length;
+  const msgsCount = messages.filter((msg) => msg.relatedChannelId === activeChannel.id).length;
 
   const formik = useFormik({
     initialValues: {

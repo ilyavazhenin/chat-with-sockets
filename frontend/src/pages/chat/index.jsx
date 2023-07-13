@@ -17,6 +17,7 @@ import routes from '../../utils/routes';
 
 const ChatMain = (props) => {
   const { socket } = props;
+  socket.connect(); // only in this component we need socket connection
   const { t } = useTranslation();
 
   const navigate = useNavigate();
@@ -78,6 +79,13 @@ const ChatMain = (props) => {
           notify.onLoadingDataError(t('chat.toast.loadError'));
         });
     }
+  }, []);
+
+  useEffect(() => {
+    socket.connect();
+    return () => {
+      socket.disconnect(); // disconnecting on unmount
+    };
   }, []);
 
   return (

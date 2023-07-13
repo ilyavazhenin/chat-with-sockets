@@ -37,13 +37,6 @@ const App = () => {
   filter.add(filter.getDictionary('ru'));
 
   useEffect(() => {
-    socket.connect();
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
-
-  useEffect(() => {
     socket.on('connect_error', () => {
       notify.onLoadingDataError(i18inst.t('chat.toast.loadError'));
     });
