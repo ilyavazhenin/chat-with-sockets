@@ -1,12 +1,13 @@
+/* eslint-disable max-len */
 /* eslint-disable react-hooks/exhaustive-deps */
-import {
-  useContext, useEffect, useRef,
-  // useState,
-} from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
-// import Badge from 'react-bootstrap/Badge';
 import { useTranslation } from 'react-i18next';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import filter from 'leo-profanity';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
 import { msgSelectors } from '../../../slices/messagesSlice.js';
 import ActiveChannelContext from '../../../utils/active-channel-context.js';
 import CurrentUserContext from '../../../utils/auth-context.js';
@@ -15,8 +16,6 @@ import notify from '../../../utils/toast-notifier.js';
 const MessagesBox = (props) => {
   const { socket } = props;
   const { t } = useTranslation();
-
-  // const dispatch = useDispatch();
   const messages = useSelector(msgSelectors.selectAll);
 
   const { activeChannel } = useContext(ActiveChannelContext);
@@ -24,29 +23,33 @@ const MessagesBox = (props) => {
 
   const msgRef = useRef();
   const bottomRef = useRef();
-  const msgsCount = messages.filter((msg) => msg.relatedChannelId === activeChannel.id).length;
+  const msgsCount = messages.filter(
+    (msg) => msg.relatedChannelId === activeChannel.id,
+  ).length;
 
-  const handleMsgSubmit = async (e) => {
-    e.preventDefault();
-    const currentMsg = filter.clean(msgRef.current.value);
-    await socket.emit(
-      'newMessage',
-      {
-        message: currentMsg,
-        relatedChannelId: activeChannel.id,
-        user: user.userName,
-      },
-      async (respData) => {
-        if (respData.status !== 'ok') notify.onUnableToEmitEvent(t('chat.toast.cantSendMsg'));
-      },
-    );
-
-    // socket.on('connect_error', () => {
-    //   setSocketError({ message: t('chat.errors.socketError') });
-    // });
-    msgRef.current.value = ''; // TODO: использовать формик и бутстрап? и заменить на resetForm
-    // setSocketError({ message: '' });
-  };
+  const formik = useFormik({
+    initialValues: {
+      message: '',
+    },
+    validationSchema: Yup.object({
+      message: Yup.string().required(),
+    }),
+    onSubmit: async (values) => {
+      const cleanedMsg = filter.clean(values.message);
+      await socket.emit(
+        'newMessage',
+        {
+          message: cleanedMsg,
+          relatedChannelId: activeChannel.id,
+          user: user.userName,
+        },
+        async (respData) => {
+          if (respData.status !== 'ok') { notify.onUnableToEmitEvent(t('chat.toast.cantSendMsg')); }
+        },
+      );
+      formik.resetForm();
+    },
+  });
 
   useEffect(() => {
     msgRef.current.focus();
@@ -54,7 +57,7 @@ const MessagesBox = (props) => {
 
   useEffect(() => {
     bottomRef.current.scrollIntoView();
-  }, [handleMsgSubmit]);
+  }, [formik.handleSubmit]);
 
   return (
     <div className="col p-0 h-100">
@@ -73,10 +76,17 @@ const MessagesBox = (props) => {
             {t('chat.messages', { count: msgsCount })}
           </span>
         </div>
-        <div id="messages-box" className="chat-messages overflow-auto px-5">
-          {messages.filter((msg) => msg.relatedChannelId === activeChannel.id)
+        <div
+          id="messages-box"
+          className="chat-messages overflow-auto px-5"
+        >
+          {messages
+            .filter((msg) => msg.relatedChannelId === activeChannel.id)
             .map((msg) => (
-              <div className="text-break mb-2" key={msg.id}>
+              <div
+                className="text-break mb-2"
+                key={msg.id}
+              >
                 <b>{msg.user}</b>
                 :
                 {' '}
@@ -86,20 +96,36 @@ const MessagesBox = (props) => {
           <div ref={bottomRef} />
         </div>
         <div className="mt-auto px-5 py-3">
-          <form noValidate="" className="py-1 border rounded-2" onSubmit={handleMsgSubmit}>
-            <div className="input-group has-validation">
-              <input name="body" aria-label="Новое сообщение" placeholder={t('chat.enterMessage')} className="border-0 p-0 ps-2 form-control" ref={msgRef} />
-              <button type="submit" disabled="" className="btn btn-group-vertical">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="20" height="20" fillRule="currentColor">
-                  <path fillRule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm4.5 5.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z" />
+          <Form onSubmit={formik.handleSubmit}>
+            <InputGroup className="d-flex">
+              <Form.Control
+                name="message"
+                size="sm"
+                type="text"
+                placeholder={t('chat.enterMessage')}
+                value={formik.values.message}
+                onChange={formik.handleChange}
+                ref={msgRef}
+              />
+              <button
+                type="submit"
+                disabled=""
+                className="btn btn-group-vertical text-primary"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                  className="bi bi-send"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z" />
                 </svg>
-                <span className="visually-hidden">{t('chat.sendMsg')}</span>
               </button>
-            </div>
-          </form>
+            </InputGroup>
+          </Form>
         </div>
-        {/* {socketError.message.length ?
-          <Badge bg="danger">{socketError.message}</Badge> : null} */}
       </div>
     </div>
   );
