@@ -10,6 +10,7 @@ import filter from 'leo-profanity';
 import { msgSelectors } from '../../../slices/messagesSlice.js';
 import ActiveChannelContext from '../../../utils/active-channel-context.js';
 import CurrentUserContext from '../../../utils/auth-context.js';
+import notify from '../../../utils/toast-notifier.js';
 
 const MessagesBox = (props) => {
   const { socket } = props;
@@ -34,6 +35,9 @@ const MessagesBox = (props) => {
         message: currentMsg,
         relatedChannelId: activeChannel.id,
         user: user.userName,
+      },
+      async (respData) => {
+        if (respData.status !== 'ok') notify.onUnableToEmitEvent(t('chat.toast.cantSendMsg'));
       },
     );
 

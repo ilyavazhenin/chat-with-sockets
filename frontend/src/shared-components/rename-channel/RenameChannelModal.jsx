@@ -8,6 +8,7 @@ import Row from 'react-bootstrap/Row';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
+import notify from '../../utils/toast-notifier';
 
 const RenameChannelModal = (props) => {
   const { t } = useTranslation();
@@ -36,7 +37,9 @@ const RenameChannelModal = (props) => {
         ...currentchannel,
         name: values.channelName,
       };
-      await socket.emit('renameChannel', renamedChannel);
+      await socket.emit('renameChannel', renamedChannel, async (respData) => {
+        if (respData.status !== 'ok') notify.onUnableToEmitEvent(t('chat.toast.cantRenameChannel'));
+      });
       onHide();
       formik.resetForm();
     },

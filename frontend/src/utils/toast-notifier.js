@@ -32,11 +32,18 @@ const onLoadingDataError = (msg) => toast.error(msg, {
   autoClose: 3000,
 });
 
+const onUnableToEmitEvent = (msg) => toast.error(msg, {
+  toastId: 'unableToEmit',
+  ...toastSettings,
+  autoClose: 3000,
+});
+
 const notify = {
   onChannelRemoved,
   onChannelCreated,
   onChannelRenamed,
   onLoadingDataError,
+  onUnableToEmitEvent,
 };
 
 export default notify;

@@ -9,6 +9,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import CurrentUserContext from '../../utils/auth-context';
+import notify from '../../utils/toast-notifier';
 
 const AddChannelModal = (props) => {
   const { t } = useTranslation();
@@ -37,7 +38,9 @@ const AddChannelModal = (props) => {
         name: values.channelName,
         createdByUser: user.userName,
       };
-      await socket.emit('newChannel', newChannel, () => {});
+      await socket.emit('newChannel', newChannel, async (respData) => {
+        if (respData.status !== 'ok') notify.onUnableToEmitEvent(t('chat.toast.cantCreateChannel'));
+      });
       onHide();
       formik.resetForm();
     },

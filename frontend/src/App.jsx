@@ -27,31 +27,30 @@ const rollbarConfig = { // only for production env to watch for frontend errors
   environment: 'prod',
 };
 
+const i18inst = i18n.createInstance();
+await i18inst
+  .use(initReactI18next)
+  .init({
+    fallbackLng: 'ru',
+    resources,
+    interpolation: {
+      escapeValue: false,
+    },
+  });
+
 const App = () => {
   const [user, setUser] = useState({ userName: localStorage.getItem('userName'), token: localStorage.getItem('token') });
-  // const [socketError, setSocketError] = useState({ message: '' });
   const socket = io('localhost:3000', {
     autoConnect: false,
   });
 
-  const i18inst = i18n.createInstance();
-  i18inst
-    .use(initReactI18next)
-    .init({
-      fallbackLng: 'ru',
-      resources,
-      interpolation: {
-        escapeValue: false,
-      },
-    }).then(() => {
-      filter.add(filter.getDictionary('en'));
-      filter.add(filter.getDictionary('ru'));
-    });
+  filter.add(filter.getDictionary('en'));
+  filter.add(filter.getDictionary('ru'));
 
   useEffect(() => {
     socket.connect();
     return () => {
-      socket.disconnect();
+      socket.disconnect(); // disconnect on unmount
     };
   }, []);
 
