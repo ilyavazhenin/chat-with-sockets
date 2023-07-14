@@ -3,15 +3,13 @@ import Form from 'react-bootstrap/Form';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
-import { useContext, useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import CurrentUserContext from '../../../utils/auth-context';
 import handleLogin from '../utils/handleLogin';
 
 const LoginForm = () => {
   const { t } = useTranslation();
   const nameRef = useRef();
-  const { setUser } = useContext(CurrentUserContext);
   const navigate = useNavigate();
   const requiredError = t('general.errors.requiredField');
 
@@ -26,7 +24,17 @@ const LoginForm = () => {
       password: Yup.string()
         .required(requiredError),
     }),
-    onSubmit: async () => handleLogin(formik, setUser, navigate, t),
+    onSubmit: async () => {
+      const response = await handleLogin(formik, t);
+      if (response.status === 200) {
+        const { token } = response.data;
+        const userName = formik.values.nickname;
+        localStorage.setItem('token', token);
+        localStorage.setItem('userName', userName);
+        // useUser({ id: 1, userName, token });
+        navigate('/');
+      }
+    },
   });
 
   useEffect(() => {

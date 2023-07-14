@@ -2,25 +2,34 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
-import { useContext, useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import CurrentUserContext from '../../../utils/auth-context';
+// import CurrentUserContext from '../../../utils/auth-context';
 import handleReg from '../utils/handleReg';
 import { registerSchema } from '../../../utils/yup-schemas';
+// import useUser from '../../../hooks/useUser';
 
 const RegisterForm = () => {
   const { t } = useTranslation();
   const nameRef = useRef();
-  const { setUser } = useContext(CurrentUserContext);
+  // const { setUser } = useContext(CurrentUserContext);
   const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
       nickname: '',
       password: '',
+      confirmPassword: '',
     },
     validationSchema: registerSchema(),
-    onSubmit: async () => handleReg(formik, setUser, navigate, t),
+    onSubmit: async () => {
+      const response = await handleReg(formik, t);
+      if (response.status === 201) {
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('userName', formik.values.nickname);
+        navigate('/');
+      }
+    },
   });
 
   useEffect(() => {

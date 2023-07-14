@@ -10,8 +10,9 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { msgSelectors } from '../../../slices/messagesSlice.js';
 import ActiveChannelContext from '../../../utils/active-channel-context.js';
-import CurrentUserContext from '../../../utils/auth-context.js';
+// import CurrentUserContext from '../../../utils/auth-context.js';
 import notify from '../../../utils/toast-notifier.js';
+import useUser from '../../../hooks/useUser.js';
 
 const MessagesBox = (props) => {
   const { socket } = props;
@@ -19,7 +20,7 @@ const MessagesBox = (props) => {
   const messages = useSelector(msgSelectors.selectAll);
 
   const { activeChannel } = useContext(ActiveChannelContext);
-  const { user } = useContext(CurrentUserContext);
+  const user = useUser();
 
   const msgRef = useRef();
   const bottomRef = useRef();

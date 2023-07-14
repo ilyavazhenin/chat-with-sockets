@@ -1,20 +1,22 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { useContext } from 'react';
+// import { useContext } from 'react';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { useFormik } from 'formik';
 // import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
-import CurrentUserContext from '../../utils/auth-context';
+// import CurrentUserContext from '../../utils/auth-context';
 import notify from '../../utils/toast-notifier';
 import { addChannelSchema } from '../../utils/yup-schemas';
+import useUser from '../../hooks/useUser';
 
 const AddChannelModal = (props) => {
   const { t } = useTranslation();
-  const { user } = useContext(CurrentUserContext);
+  const user = useUser();
+
   const {
     onHide,
     show,
