@@ -20,9 +20,9 @@ import ChatMain from './pages/chat';
 import Navbar from './shared-components/Navbar';
 
 import { i18inst } from './i18n';
-// import useUser from './hooks/useUser';
+import useUser from './hooks/useUser';
 
-const rollbarConfig = { // only for production env to watch for frontend errors
+const rollbarConfig = {
   accessToken: process.env.REACT_APP_ROLLBAR_TOKEN,
   environment: 'prod',
 };
@@ -30,13 +30,13 @@ const rollbarConfig = { // only for production env to watch for frontend errors
 const socket = io();
 
 const App = () => {
-  // const curentUser = {
-  //   id: 1,
+  // const authorizedUser = {
+  //   id: 1, // need for using Entity in Slice
   //   userName: localStorage.getItem('userName'),
   //   token: localStorage.getItem('token'),
   // };
 
-  // useUser(curentUser);
+  const user = useUser();
 
   filter.add(filter.getDictionary('en'));
   filter.add(filter.getDictionary('ru'));
@@ -55,7 +55,7 @@ const App = () => {
         <BrowserRouter>
           <Navbar />
           <Routes>
-            <Route path="/" element={<ChatMain socket={socket} />} />
+            <Route path="/" element={<ChatMain socket={socket} user={user} />} />
             <Route path="login" element={<LoginCard />} />
             <Route path="signup" element={<RegisterCard />} />
             <Route path="*" element={<NotFound />} />

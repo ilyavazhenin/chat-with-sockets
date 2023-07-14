@@ -9,6 +9,10 @@ const handleReg = async (formikObj, t) => {
     });
 
     if (response.status === 201) {
+      const { token } = response.data;
+      const userName = formikObj.values.nickname;
+      localStorage.setItem('token', token);
+      localStorage.setItem('userName', userName);
       return response;
     }
   } catch (e) {

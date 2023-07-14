@@ -5,6 +5,8 @@ import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import { useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { actions } from '../../../slices/userSlice';
 import handleLogin from '../utils/handleLogin';
 
 const LoginForm = () => {
@@ -12,6 +14,7 @@ const LoginForm = () => {
   const nameRef = useRef();
   const navigate = useNavigate();
   const requiredError = t('general.errors.requiredField');
+  const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: {
@@ -27,11 +30,9 @@ const LoginForm = () => {
     onSubmit: async () => {
       const response = await handleLogin(formik, t);
       if (response.status === 200) {
-        const { token } = response.data;
-        const userName = formik.values.nickname;
-        localStorage.setItem('token', token);
-        localStorage.setItem('userName', userName);
-        // useUser({ id: 1, userName, token });
+        const token = localStorage.getItem('token');
+        const userName = localStorage.getItem('userName');
+        dispatch(actions.addCurrentUser({ id: 1, userName, token }));
         navigate('/');
       }
     },

@@ -9,6 +9,11 @@ const handleLogin = async (formikObj, t) => {
     });
 
     if (response.status === 200) {
+      const { token } = response.data;
+      const userName = formikObj.values.nickname;
+      localStorage.setItem('token', token);
+      localStorage.setItem('userName', userName);
+      // dispatch(actions.addCurrentUser({ id: 1, userName, token }));
       return response;
     }
   } catch (e) {
