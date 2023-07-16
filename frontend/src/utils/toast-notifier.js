@@ -26,10 +26,15 @@ const onChannelRenamed = (msg) => toast(msg, {
   ...toastSettings,
 });
 
-const onLoadingDataError = (msg) => toast.error(msg, {
+const onLoadingDataError = (msg, navigate) => toast.error(msg, {
   toastId: 'loadError',
   ...toastSettings,
   autoClose: 3000,
+  onClose: () => {
+    console.log('navigatin');
+    localStorage.clear();
+    return navigate('/login');
+  },
 });
 
 const onUnableToEmitEvent = (msg) => toast.error(msg, {

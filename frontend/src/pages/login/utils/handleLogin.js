@@ -13,8 +13,9 @@ const handleLogin = async (formikObj, t) => {
       const userName = formikObj.values.nickname;
       localStorage.setItem('token', token);
       localStorage.setItem('userName', userName);
+      const authorizedUser = { id: 1, userName, token };
       // dispatch(actions.addCurrentUser({ id: 1, userName, token }));
-      return response;
+      return authorizedUser;
     }
   } catch (e) {
     const errors = {};

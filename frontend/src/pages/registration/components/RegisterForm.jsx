@@ -23,11 +23,12 @@ const RegisterForm = () => {
     },
     validationSchema: registerSchema(),
     onSubmit: async () => {
-      const response = await handleReg(formik, t);
-      if (response.status === 201) {
-        const token = localStorage.getItem('token');
-        const userName = localStorage.getItem('userName');
-        dispatch(actions.addCurrentUser({ id: 1, userName, token }));
+      const user = await handleReg(formik, t);
+      if (user?.token) {
+        // useUser(user);
+        // const token = localStorage.getItem('token');
+        // const userName = localStorage.getItem('userName');
+        dispatch(actions.addCurrentUser(user));
         navigate('/');
       }
     },

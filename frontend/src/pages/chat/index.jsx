@@ -1,12 +1,11 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ToastContainer } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import ChannelsBox from './components/ChannelsBox';
 import MessagesBox from './components/MessagesBox';
 import { actions as channelsActions } from '../../slices/channelsSlice';
@@ -14,24 +13,15 @@ import { actions as messagesActions, msgSelectors } from '../../slices/messagesS
 import ActiveChannelContext from '../../utils/active-channel-context';
 import notify from '../../utils/toast-notifier';
 import routes from '../../utils/routes';
-// import useUser from '../../hooks/useUser';
+import useUser from '../../hooks/useUser';
 
 const ChatMain = (props) => {
-  const { socket, user } = props;
-  socket.connect(); // only in this component we need socket connection
+  const { socket } = props;
+  // socket.connect(); // only in this component we need socket connection
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const navigateToLogin = useNavigate();
 
-  console.log('trying to get user from hook');
-  // const user = useUser();
-
-  // const authorizedUser = {
-  //   id: 1, // need for using Entity in Slice
-  //   userName: localStorage.getItem('userName'),
-  //   token: localStorage.getItem('token'),
-  // };
-
-  // useUser(authorizedUser);
+  const user = useUser();
 
   const dispatch = useDispatch();
   const [activeChannel, setActiveChannel] = useState({ id: 1, channelName: 'general' });
@@ -76,14 +66,16 @@ const ChatMain = (props) => {
     socket.on('newMessage', (messageWithId) => {
       dispatch(messagesActions.addMessage(messageWithId));
     });
+
+    socket.on('connect_error', () => {
+      console.log('connect_error');
+      notify.onLoadingDataError(t('chat.toast.loadError'), navigateToLogin);
+    });
   }, [socket]);
 
   useEffect(() => {
-    console.log(user, 'check user');
-    if (!user?.userName) navigate('/login');
     const response = axios({ method: 'get', url: routes.data, headers: { Authorization: `Bearer ${user?.token}` } });
     response.then((data) => {
-      console.log(data, 'RESPONSE');
       dispatch(channelsActions.addChannels(data.data.channels));
       dispatch(messagesActions.addMessages(data.data.messages));
     })
@@ -93,11 +85,19 @@ const ChatMain = (props) => {
   }, []);
 
   useEffect(() => {
-    socket.connect();
+    socket.open();
+    console.log('socket connect');
     return () => {
-      socket.disconnect(); // disconnecting on unmount
+      console.log('close socket');
+      socket.close();
     };
   }, []);
+
+  // useEffect(() => {
+  //   socket.on('connect_error', () => {
+  //     notify.onLoadingDataError(i18inst.t('chat.toast.loadError'));
+  //   });
+  // }, [socket]);
 
   return (
     <div className="h-100" id="chat">

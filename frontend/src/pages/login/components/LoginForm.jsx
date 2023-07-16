@@ -7,6 +7,7 @@ import { useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { actions } from '../../../slices/userSlice';
+// import useUser from '../../../hooks/useUser';
 import handleLogin from '../utils/handleLogin';
 
 const LoginForm = () => {
@@ -28,11 +29,12 @@ const LoginForm = () => {
         .required(requiredError),
     }),
     onSubmit: async () => {
-      const response = await handleLogin(formik, t);
-      if (response.status === 200) {
-        const token = localStorage.getItem('token');
-        const userName = localStorage.getItem('userName');
-        dispatch(actions.addCurrentUser({ id: 1, userName, token }));
+      const user = await handleLogin(formik, t);
+      if (user?.token) {
+        // useUser(user);
+        // const token = localStorage.getItem('token');
+        // const userName = localStorage.getItem('userName');
+        dispatch(actions.addCurrentUser(user));
         navigate('/');
       }
     },
