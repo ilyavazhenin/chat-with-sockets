@@ -1,38 +1,26 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useContext } from 'react';
-import { useSelector } from 'react-redux';
+// import { useContext } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { selectors } from '../../../slices/channelsSlice.js';
-import ActiveChannelContext from '../../../utils/active-channel-context.js';
+import { selectors, actions as channelsActions } from '../../../slices/channelsSlice.js';
+// import ActiveChannelContext from '../../../utils/active-channel-context.js';
 import AddChannelBtn from '../../../shared-components/add-channel/AddChannelBtn.jsx';
 import ChannelControlDropdown from './ChannelControlDroprown.jsx';
 // import CurrentUserContext from '../../../utils/auth-context.js';
 
 const ChannelsBox = (props) => {
   const { socket } = props;
-  // const { user } = useContext(CurrentUserContext);
-  // const dispatch = useDispatch();
+  const activeChannel = useSelector((state) => state.channels.activeChannel);
+  const dispatch = useDispatch();
 
   const { t } = useTranslation();
   const channels = useSelector(selectors.selectAll);
-  const { activeChannel, setActiveChannel } = useContext(ActiveChannelContext);
+  // const { activeChannel, setActiveChannel } = useContext(ActiveChannelContext);
 
   const activeChannelClasses = 'w-100 rounded-0 text-start text-truncate btn btn-secondary';
   const innactiveChannelClasses = 'w-100 rounded-0 text-start text-truncate btn';
 
   const isChannelActive = (currentIterId) => activeChannel.id === currentIterId;
-
-  // useEffect(() => {
-  //   socket.on('newChannel', (createdChannel) => {
-  //     dispatch(channelsActions.addChannel(createdChannel));
-  //     if (user.userName === createdChannel.createdByUser) {
-  //       setActiveChannel({
-  //         id: createdChannel.id,
-  //         channelName: createdChannel.name,
-  //       });
-  //     }
-  //   });
-  // }, []);
 
   return (
     <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
@@ -49,7 +37,7 @@ const ChannelsBox = (props) => {
                 className={
                   isChannelActive(channel.id) ? activeChannelClasses : innactiveChannelClasses
                 }
-                onClick={() => setActiveChannel({ id: channel.id, channelName: channel.name })}
+                onClick={() => dispatch(channelsActions.setActiveChannel(channel))}
               >
                 <span className="me-1">#</span>
                 {channel.name}

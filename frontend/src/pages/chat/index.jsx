@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -10,22 +10,21 @@ import ChannelsBox from './components/ChannelsBox';
 import MessagesBox from './components/MessagesBox';
 import { actions as channelsActions } from '../../slices/channelsSlice';
 import { actions as messagesActions, msgSelectors } from '../../slices/messagesSlice';
-import ActiveChannelContext from '../../utils/active-channel-context';
 import notify from '../../utils/toast-notifier';
 import routes from '../../utils/routes';
 import useUser from '../../hooks/useUser';
 
 const ChatMain = (props) => {
   const { socket } = props;
-  // socket.connect(); // only in this component we need socket connection
   const { t } = useTranslation();
   const navigateToLogin = useNavigate();
 
   const user = useUser();
 
   const dispatch = useDispatch();
-  const [activeChannel, setActiveChannel] = useState({ id: 1, channelName: 'general' });
   const messages = useSelector(msgSelectors.selectAll);
+  const activeChannel = useSelector((state) => state.channels.activeChannel);
+  // const channels = useSelector(selectors.selectAll);
 
   useEffect(() => {
     socket.on('removeChannel', (data) => {
@@ -34,7 +33,7 @@ const ChatMain = (props) => {
         .map((m) => m.id);
       dispatch(channelsActions.deleteChannel(data.id));
       dispatch(messagesActions.deleteMessagesByChannel(messagesIdsToDelete));
-      setActiveChannel({ id: 1, channelName: 'general' });
+      dispatch(channelsActions.setActiveChannel({ id: 1, name: 'general' }));
       notify.onChannelRemoved(t('chat.toast.channelDeleted'));
     });
 
@@ -45,20 +44,14 @@ const ChatMain = (props) => {
       }));
       notify.onChannelRenamed(t('chat.toast.channelRenamed'));
       if (activeChannel.id === renamedChannel.id) {
-        setActiveChannel({
-          id: renamedChannel.id,
-          channelName: renamedChannel.name,
-        });
+        dispatch(channelsActions.setActiveChannel(renamedChannel));
       }
     });
 
     socket.on('newChannel', (createdChannel) => {
       dispatch(channelsActions.addChannel(createdChannel));
       if (user?.userName === createdChannel.createdByUser) {
-        setActiveChannel({
-          id: createdChannel.id,
-          channelName: createdChannel.name,
-        });
+        dispatch(channelsActions.setActiveChannel(createdChannel));
         notify.onChannelCreated(t('chat.toast.channelCreated'));
       }
     });
@@ -68,7 +61,6 @@ const ChatMain = (props) => {
     });
 
     socket.on('connect_error', () => {
-      console.log('connect_error');
       notify.onLoadingDataError(t('chat.toast.loadError'), navigateToLogin);
     });
   }, [socket]);
@@ -82,15 +74,15 @@ const ChatMain = (props) => {
       .catch(() => {
         notify.onLoadingDataError(t('chat.toast.loadError'));
       });
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     socket.open();
     console.log('socket connect');
-    return () => {
-      console.log('close socket');
-      socket.close();
-    };
+    // return () => {
+    //   console.log('close socket');
+    //   socket.close();
+    // };
   }, []);
 
   // useEffect(() => {
@@ -105,10 +97,10 @@ const ChatMain = (props) => {
       <div className="d-flex flex-column h-100">
         <div className="container h-100 my-4 overflow-hidden rounded shadow">
           <div className="row h-100 bg-white flex-md-row">
-            <ActiveChannelContext.Provider value={{ activeChannel, setActiveChannel }}>
-              <ChannelsBox socket={socket} />
-              <MessagesBox socket={socket} />
-            </ActiveChannelContext.Provider>
+            {/* <ActiveChannelContext.Provider value={{ activeChannel, setActiveChannel }}> */}
+            <ChannelsBox socket={socket} />
+            <MessagesBox socket={socket} />
+            {/* </ActiveChannelContext.Provider> */}
           </div>
         </div>
       </div>

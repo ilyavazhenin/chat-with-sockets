@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useContext, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
@@ -9,17 +9,19 @@ import filter from 'leo-profanity';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { msgSelectors } from '../../../slices/messagesSlice.js';
-import ActiveChannelContext from '../../../utils/active-channel-context.js';
+// import ActiveChannelContext from '../../../utils/active-channel-context.js';
 // import CurrentUserContext from '../../../utils/auth-context.js';
 import notify from '../../../utils/toast-notifier.js';
 import useUser from '../../../hooks/useUser.js';
+// import { selectors } from '../../../slices/channelsSlice.js';
 
 const MessagesBox = (props) => {
   const { socket } = props;
   const { t } = useTranslation();
   const messages = useSelector(msgSelectors.selectAll);
+  const activeChannel = useSelector((state) => state.channels.activeChannel);
+  // console.log(activeChannelId, 'IDIDIDIDID');
 
-  const { activeChannel } = useContext(ActiveChannelContext);
   const user = useUser();
 
   const msgRef = useRef();
@@ -66,7 +68,7 @@ const MessagesBox = (props) => {
             <b>
               #
               {' '}
-              {activeChannel.channelName}
+              {activeChannel.name}
             </b>
           </p>
           <span className="text-muted">
