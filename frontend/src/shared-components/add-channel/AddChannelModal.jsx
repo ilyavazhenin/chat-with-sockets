@@ -1,12 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-// import { useContext } from 'react';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { useFormik } from 'formik';
-// import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import notify from '../../utils/toast-notifier';
 import { addChannelSchema } from '../../utils/yup-schemas';
@@ -17,7 +15,7 @@ import socket from '../../utils/socket-init';
 const AddChannelModal = (props) => {
   const { t } = useTranslation();
   const { currentUser } = useUser();
-  const socketInstance = useSocket(socket);
+  const { createChannel } = useSocket(socket);
 
   const {
     onHide,
@@ -35,7 +33,7 @@ const AddChannelModal = (props) => {
         name: values.channelName,
         createdByUser: currentUser.userName,
       };
-      (await socketInstance).createChannel(newChannel, notify);
+      await createChannel(newChannel, notify);
       onHide();
       formik.resetForm();
     },

@@ -1,7 +1,7 @@
 import { i18inst } from '../i18n';
 
-const useSocket = async (socketInstance) => ({
-  emitMessage: (payload, notifyInst) => socketInstance.emit(
+const useSocket = (socketInstance) => ({
+  emitMessage: async (payload, notifyInst) => socketInstance.emit(
     'newMessage',
     payload,
     async (respData) => {
@@ -9,7 +9,7 @@ const useSocket = async (socketInstance) => ({
     },
   ),
 
-  createChannel: (payload, notifyInst) => socketInstance.emit(
+  createChannel: async (payload, notifyInst) => socketInstance.emit(
     'newChannel',
     payload,
     async (respData) => {
@@ -17,7 +17,7 @@ const useSocket = async (socketInstance) => ({
     },
   ),
 
-  removeChannel: (payload, notifyInst) => socketInstance.emit(
+  removeChannel: async (payload, notifyInst) => socketInstance.emit(
     'removeChannel',
     payload,
     async (respData) => {
@@ -25,7 +25,7 @@ const useSocket = async (socketInstance) => ({
     },
   ),
 
-  renameChannel: (payload, notifyInst) => socketInstance.emit(
+  renameChannel: async (payload, notifyInst) => socketInstance.emit(
     'renameChannel',
     payload,
     async (respData) => {

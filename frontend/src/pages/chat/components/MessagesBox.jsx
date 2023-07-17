@@ -18,7 +18,7 @@ const MessagesBox = () => {
   const { t } = useTranslation();
   const messages = useSelector(msgSelectors.selectAll);
   const activeChannel = useSelector((state) => state.channels.activeChannel);
-  const socketInstance = useSocket(socket);
+  const { emitMessage } = useSocket(socket);
 
   const { currentUser } = useUser();
 
@@ -35,7 +35,7 @@ const MessagesBox = () => {
     }),
     onSubmit: async (values) => {
       const cleanedMsg = filter.clean(values.message);
-      (await socketInstance).emitMessage(
+      await emitMessage(
         {
           message: cleanedMsg,
           relatedChannelId: activeChannel.id,

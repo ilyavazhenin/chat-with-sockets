@@ -7,15 +7,16 @@ import socket from '../../utils/socket-init';
 import useSocket from '../../hooks/useSocket';
 
 const DeleteChannelModal = (props) => {
-  const socketInstance = useSocket(socket);
+  const { removeChannel } = useSocket(socket);
   const { t } = useTranslation();
+
   const {
     show, onHide, channelId,
   } = props;
 
   const handleDelete = (id) => async (e) => {
     e.preventDefault();
-    (await socketInstance).removeChannel({ id }, notify);
+    await removeChannel({ id }, notify);
     onHide();
   };
 

@@ -14,7 +14,7 @@ import socket from '../../utils/socket-init';
 
 const RenameChannelModal = (props) => {
   const { t } = useTranslation();
-  const socketInstance = useSocket(socket);
+  const { renameChannel } = useSocket(socket);
 
   const {
     currentchannel,
@@ -33,7 +33,7 @@ const RenameChannelModal = (props) => {
         ...currentchannel,
         name: values.channelName,
       };
-      (await socketInstance).renameChannel(renamedChannel, notify);
+      await renameChannel(renamedChannel, notify);
       onHide();
       formik.resetForm();
     },
