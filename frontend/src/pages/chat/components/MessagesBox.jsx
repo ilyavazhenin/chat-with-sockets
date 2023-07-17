@@ -20,7 +20,7 @@ const MessagesBox = () => {
   const activeChannel = useSelector((state) => state.channels.activeChannel);
   const socketInstance = useSocket(socket);
 
-  const user = useUser();
+  const { currentUser } = useUser();
 
   const msgRef = useRef();
   const bottomRef = useRef();
@@ -39,21 +39,10 @@ const MessagesBox = () => {
         {
           message: cleanedMsg,
           relatedChannelId: activeChannel.id,
-          user: user.userName,
+          user: currentUser.userName,
         },
         notify,
       );
-      // await socket.emit(
-      //   'newMessage',
-      //   {
-      //     message: cleanedMsg,
-      //     relatedChannelId: activeChannel.id,
-      //     user: user.userName,
-      //   },
-      //   (respData) => {
-      //     if (respData.status !== 'ok') { notify.onUnableToEmitEvent(t('chat.toast.cantSendMsg')); }
-      //   },
-      // );
       formik.resetForm();
     },
   });

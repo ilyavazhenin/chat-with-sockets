@@ -2,10 +2,10 @@ import { Navigate } from 'react-router-dom';
 import useUser from '../hooks/useUser';
 
 const PrivateRoute = ({ children }) => {
-  const user = useUser();
+  const { currentUser } = useUser();
 
   return (
-    user?.token ? children : <Navigate to="/login" />
+    currentUser?.token ? children : <Navigate to="/login" />
   );
 };
 

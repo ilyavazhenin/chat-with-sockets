@@ -16,16 +16,14 @@ import useUser from '../../hooks/useUser';
 import socketInstance from '../../utils/socket-init';
 
 const ChatMain = () => {
-  // const { socket } = props;
   const { t } = useTranslation();
   const navigateToLogin = useNavigate();
 
-  const user = useUser();
+  const { currentUser } = useUser();
 
   const dispatch = useDispatch();
   const messages = useSelector(msgSelectors.selectAll);
   const activeChannel = useSelector((state) => state.channels.activeChannel);
-  // const channels = useSelector(selectors.selectAll);
 
   useEffect(() => {
     socketInstance.on('removeChannel', (data) => {
@@ -51,7 +49,7 @@ const ChatMain = () => {
 
     socketInstance.on('newChannel', (createdChannel) => {
       dispatch(channelsActions.addChannel(createdChannel));
-      if (user?.userName === createdChannel.createdByUser) {
+      if (currentUser?.userName === createdChannel.createdByUser) {
         dispatch(channelsActions.setActiveChannel(createdChannel));
         notify.onChannelCreated(t('chat.toast.channelCreated'));
       }
@@ -66,17 +64,8 @@ const ChatMain = () => {
     });
   }, [socketInstance]);
 
-  // useEffect(() => {
-  //   socket.open();
-  //   console.log('socket connect');
-  //   return () => {
-  //     console.log('close socket');
-  //     socket.close();
-  //   };
-  // }, []);
-
   useEffect(() => {
-    const response = axios({ method: 'get', url: routes.data, headers: { Authorization: `Bearer ${user?.token}` } });
+    const response = axios({ method: 'get', url: routes.data, headers: { Authorization: `Bearer ${currentUser?.token}` } });
     response.then((data) => {
       dispatch(channelsActions.addChannels(data.data.channels));
       dispatch(messagesActions.addMessages(data.data.messages));
@@ -86,22 +75,14 @@ const ChatMain = () => {
       });
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   socket.on('connect_error', () => {
-  //     notify.onLoadingDataError(i18inst.t('chat.toast.loadError'));
-  //   });
-  // }, [socket]);
-
   return (
     <div className="h-100" id="chat">
       <ToastContainer />
       <div className="d-flex flex-column h-100">
         <div className="container h-100 my-4 overflow-hidden rounded shadow">
           <div className="row h-100 bg-white flex-md-row">
-            {/* <ActiveChannelContext.Provider value={{ activeChannel, setActiveChannel }}> */}
             <ChannelsBox />
             <MessagesBox />
-            {/* </ActiveChannelContext.Provider> */}
           </div>
         </div>
       </div>

@@ -25,9 +25,6 @@ const RegisterForm = () => {
     onSubmit: async () => {
       const user = await handleReg(formik, t);
       if (user?.token) {
-        // useUser(user);
-        // const token = localStorage.getItem('token');
-        // const userName = localStorage.getItem('userName');
         dispatch(actions.addCurrentUser(user));
         navigate('/');
       }

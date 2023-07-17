@@ -7,7 +7,6 @@ import { Provider } from 'react-redux';
 import { useEffect } from 'react';
 import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
 import filter from 'leo-profanity';
-// import { io } from 'socket.io-client';
 import NotFound from './pages/404';
 import LoginCard from './pages/login';
 import RegisterCard from './pages/registration';
