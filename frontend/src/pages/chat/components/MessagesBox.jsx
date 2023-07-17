@@ -9,18 +9,16 @@ import filter from 'leo-profanity';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { msgSelectors } from '../../../slices/messagesSlice.js';
-// import ActiveChannelContext from '../../../utils/active-channel-context.js';
-// import CurrentUserContext from '../../../utils/auth-context.js';
 import notify from '../../../utils/toast-notifier.js';
 import useUser from '../../../hooks/useUser.js';
-// import { selectors } from '../../../slices/channelsSlice.js';
+import socket from '../../../utils/socket-init.js';
+import useSocket from '../../../hooks/useSocket.js';
 
-const MessagesBox = (props) => {
-  const { socket } = props;
+const MessagesBox = () => {
   const { t } = useTranslation();
   const messages = useSelector(msgSelectors.selectAll);
   const activeChannel = useSelector((state) => state.channels.activeChannel);
-  // console.log(activeChannelId, 'IDIDIDIDID');
+  const socketInstance = useSocket(socket);
 
   const user = useUser();
 
@@ -37,17 +35,25 @@ const MessagesBox = (props) => {
     }),
     onSubmit: async (values) => {
       const cleanedMsg = filter.clean(values.message);
-      await socket.emit(
-        'newMessage',
+      (await socketInstance).emitMessage(
         {
           message: cleanedMsg,
           relatedChannelId: activeChannel.id,
           user: user.userName,
         },
-        async (respData) => {
-          if (respData.status !== 'ok') { notify.onUnableToEmitEvent(t('chat.toast.cantSendMsg')); }
-        },
+        notify,
       );
+      // await socket.emit(
+      //   'newMessage',
+      //   {
+      //     message: cleanedMsg,
+      //     relatedChannelId: activeChannel.id,
+      //     user: user.userName,
+      //   },
+      //   (respData) => {
+      //     if (respData.status !== 'ok') { notify.onUnableToEmitEvent(t('chat.toast.cantSendMsg')); }
+      //   },
+      // );
       formik.resetForm();
     },
   });

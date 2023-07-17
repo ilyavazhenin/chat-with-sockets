@@ -3,18 +3,20 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useTranslation } from 'react-i18next';
 import notify from '../../utils/toast-notifier';
+import socket from '../../utils/socket-init';
+import useSocket from '../../hooks/useSocket';
 
 const DeleteChannelModal = (props) => {
+  const socketInstance = useSocket(socket);
   const { t } = useTranslation();
   const {
-    show, onHide, channelId, socket,
+    show, onHide, channelId,
   } = props;
 
   const handleDelete = (id) => async (e) => {
     e.preventDefault();
-    await socket.emit('removeChannel', { id }, async (respData) => {
-      if (respData.status !== 'ok') notify.onUnableToEmitEvent(t('chat.toast.cantDeleteChannel'));
-    });
+    (await socketInstance).removeChannel({ id }, notify);
+    onHide();
   };
 
   return (

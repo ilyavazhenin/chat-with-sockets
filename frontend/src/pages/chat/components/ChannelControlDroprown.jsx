@@ -3,7 +3,7 @@ import RenameChannelBtn from '../../../shared-components/rename-channel/RenameCh
 import DeleteChannelBtn from '../../../shared-components/delete-channel/DeleteChannelBtn.jsx';
 
 const ChannelControlDropdown = (props) => {
-  const { active, channelId, socket } = props;
+  const { active, channelId } = props;
 
   return (
     <Dropdown>
@@ -17,11 +17,11 @@ const ChannelControlDropdown = (props) => {
 
       <Dropdown.Menu>
         <Dropdown.Item className="px-2">
-          <DeleteChannelBtn channelId={channelId} socket={socket} />
+          <DeleteChannelBtn channelId={channelId} />
         </Dropdown.Item>
 
         <Dropdown.Item className="px-2">
-          <RenameChannelBtn channelId={channelId} socket={socket} />
+          <RenameChannelBtn channelId={channelId} />
         </Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>

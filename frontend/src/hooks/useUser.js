@@ -12,8 +12,7 @@ const useUser = (userData = undefined) => { // put user into userSlice or return
       token: localStorage.getItem('token'),
     };
   }
-  // console.log(userData, 'USER DATA IN hook');
-  // console.log(currentUser, 'currentUser in hook');
+
   if (userData !== undefined) {
     dispatch(actions.addCurrentUser(userData));
     return userData;

@@ -4,8 +4,7 @@ import { selectors } from '../../slices/channelsSlice.js';
 
 import AddChannelModal from './AddChannelModal';
 
-const AddChannelButton = (props) => {
-  const { socket } = props;
+const AddChannelButton = () => {
   const [modalShow, setModalShow] = useState(false);
 
   const channels = useSelector(selectors.selectAll);
@@ -35,7 +34,6 @@ const AddChannelButton = (props) => {
         show={modalShow}
         onHide={() => setModalShow(false)}
         allchannels={channelsNames}
-        socket={socket}
       />
     </>
   );

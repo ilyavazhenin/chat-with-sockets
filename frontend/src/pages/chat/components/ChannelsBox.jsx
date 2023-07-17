@@ -1,21 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-// import { useContext } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { selectors, actions as channelsActions } from '../../../slices/channelsSlice.js';
-// import ActiveChannelContext from '../../../utils/active-channel-context.js';
 import AddChannelBtn from '../../../shared-components/add-channel/AddChannelBtn.jsx';
 import ChannelControlDropdown from './ChannelControlDroprown.jsx';
-// import CurrentUserContext from '../../../utils/auth-context.js';
+import socket from '../../../utils/socket-init.js';
 
-const ChannelsBox = (props) => {
-  const { socket } = props;
+const ChannelsBox = () => {
   const activeChannel = useSelector((state) => state.channels.activeChannel);
   const dispatch = useDispatch();
-
   const { t } = useTranslation();
   const channels = useSelector(selectors.selectAll);
-  // const { activeChannel, setActiveChannel } = useContext(ActiveChannelContext);
 
   const activeChannelClasses = 'w-100 rounded-0 text-start text-truncate btn btn-secondary';
   const innactiveChannelClasses = 'w-100 rounded-0 text-start text-truncate btn';

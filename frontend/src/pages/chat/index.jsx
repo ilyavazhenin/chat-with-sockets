@@ -13,9 +13,10 @@ import { actions as messagesActions, msgSelectors } from '../../slices/messagesS
 import notify from '../../utils/toast-notifier';
 import routes from '../../utils/routes';
 import useUser from '../../hooks/useUser';
+import socketInstance from '../../utils/socket-init';
 
-const ChatMain = (props) => {
-  const { socket } = props;
+const ChatMain = () => {
+  // const { socket } = props;
   const { t } = useTranslation();
   const navigateToLogin = useNavigate();
 
@@ -27,7 +28,7 @@ const ChatMain = (props) => {
   // const channels = useSelector(selectors.selectAll);
 
   useEffect(() => {
-    socket.on('removeChannel', (data) => {
+    socketInstance.on('removeChannel', (data) => {
       const messagesIdsToDelete = messages
         .filter((msg) => msg.relatedChannelId === data.id)
         .map((m) => m.id);
@@ -37,7 +38,7 @@ const ChatMain = (props) => {
       notify.onChannelRemoved(t('chat.toast.channelDeleted'));
     });
 
-    socket.on('renameChannel', (renamedChannel) => {
+    socketInstance.on('renameChannel', (renamedChannel) => {
       dispatch(channelsActions.renameChannel({
         id: renamedChannel.id,
         changes: { name: renamedChannel.name },
@@ -48,7 +49,7 @@ const ChatMain = (props) => {
       }
     });
 
-    socket.on('newChannel', (createdChannel) => {
+    socketInstance.on('newChannel', (createdChannel) => {
       dispatch(channelsActions.addChannel(createdChannel));
       if (user?.userName === createdChannel.createdByUser) {
         dispatch(channelsActions.setActiveChannel(createdChannel));
@@ -56,14 +57,23 @@ const ChatMain = (props) => {
       }
     });
 
-    socket.on('newMessage', (messageWithId) => {
+    socketInstance.on('newMessage', (messageWithId) => {
       dispatch(messagesActions.addMessage(messageWithId));
     });
 
-    socket.on('connect_error', () => {
+    socketInstance.on('connect_error', () => {
       notify.onLoadingDataError(t('chat.toast.loadError'), navigateToLogin);
     });
-  }, [socket]);
+  }, [socketInstance]);
+
+  // useEffect(() => {
+  //   socket.open();
+  //   console.log('socket connect');
+  //   return () => {
+  //     console.log('close socket');
+  //     socket.close();
+  //   };
+  // }, []);
 
   useEffect(() => {
     const response = axios({ method: 'get', url: routes.data, headers: { Authorization: `Bearer ${user?.token}` } });
@@ -75,15 +85,6 @@ const ChatMain = (props) => {
         notify.onLoadingDataError(t('chat.toast.loadError'));
       });
   }, [dispatch]);
-
-  useEffect(() => {
-    socket.open();
-    console.log('socket connect');
-    // return () => {
-    //   console.log('close socket');
-    //   socket.close();
-    // };
-  }, []);
 
   // useEffect(() => {
   //   socket.on('connect_error', () => {
@@ -98,8 +99,8 @@ const ChatMain = (props) => {
         <div className="container h-100 my-4 overflow-hidden rounded shadow">
           <div className="row h-100 bg-white flex-md-row">
             {/* <ActiveChannelContext.Provider value={{ activeChannel, setActiveChannel }}> */}
-            <ChannelsBox socket={socket} />
-            <MessagesBox socket={socket} />
+            <ChannelsBox />
+            <MessagesBox />
             {/* </ActiveChannelContext.Provider> */}
           </div>
         </div>

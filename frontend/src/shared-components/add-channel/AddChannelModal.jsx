@@ -12,18 +12,19 @@ import { useTranslation } from 'react-i18next';
 import notify from '../../utils/toast-notifier';
 import { addChannelSchema } from '../../utils/yup-schemas';
 import useUser from '../../hooks/useUser';
+import useSocket from '../../hooks/useSocket';
+import socket from '../../utils/socket-init';
 
 const AddChannelModal = (props) => {
   const { t } = useTranslation();
   const user = useUser();
+  const socketInstance = useSocket(socket);
 
   const {
     onHide,
     show,
     allchannels,
-    socket,
   } = props;
-  // const from3to20symbError = t('chat.errors.from3to20symbls');
 
   const formik = useFormik({
     initialValues: {
@@ -35,9 +36,7 @@ const AddChannelModal = (props) => {
         name: values.channelName,
         createdByUser: user.userName,
       };
-      await socket.emit('newChannel', newChannel, async (respData) => {
-        if (respData.status !== 'ok') notify.onUnableToEmitEvent(t('chat.toast.cantCreateChannel'));
-      });
+      (await socketInstance).createChannel(newChannel, notify);
       onHide();
       formik.resetForm();
     },
