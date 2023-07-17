@@ -2,8 +2,9 @@ import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectors } from '../../slices/channelsSlice.js';
+import UniversalModal from '../modals/UniversalModal.jsx';
 
-import RenameChannelModal from './RenameChannelModal';
+// import RenameChannelModal from './RenameChannelModal';
 
 const RenameChannelButton = (props) => {
   const { t } = useTranslation();
@@ -11,7 +12,6 @@ const RenameChannelButton = (props) => {
   const [modalShow, setModalShow] = useState(false);
   const channels = useSelector(selectors.selectAll);
   const currentChannel = channels.find((el) => el.id === channelId);
-  const channelsNames = channels.map((channel) => channel.name);
 
   return (
     <>
@@ -22,11 +22,11 @@ const RenameChannelButton = (props) => {
       >
         {t('chat.renameChannel')}
       </button>
-      <RenameChannelModal
+      <UniversalModal
         show={modalShow}
         onHide={() => setModalShow(false)}
         currentchannel={currentChannel}
-        allchannels={channelsNames}
+        modalType="rename"
       />
     </>
   );

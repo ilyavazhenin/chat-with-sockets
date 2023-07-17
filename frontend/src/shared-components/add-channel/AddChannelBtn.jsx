@@ -1,14 +1,14 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { selectors } from '../../slices/channelsSlice.js';
-
-import AddChannelModal from './AddChannelModal';
+// import { useSelector } from 'react-redux';
+// import { selectors } from '../../slices/channelsSlice.js';
+import UniversalModal from '../modals/UniversalModal.jsx';
+// import AddChannelModal from './AddChannelModal';
 
 const AddChannelButton = () => {
   const [modalShow, setModalShow] = useState(false);
 
-  const channels = useSelector(selectors.selectAll);
-  const channelsNames = channels.map((channel) => channel.name);
+  // const channels = useSelector(selectors.selectAll);
+  // const channelsNames = channels.map((channel) => channel.name);
 
   return (
     <>
@@ -30,10 +30,10 @@ const AddChannelButton = () => {
         <span className="visually-hidden">+</span>
       </button>
 
-      <AddChannelModal
+      <UniversalModal
         show={modalShow}
         onHide={() => setModalShow(false)}
-        allchannels={channelsNames}
+        modalType="create"
       />
     </>
   );

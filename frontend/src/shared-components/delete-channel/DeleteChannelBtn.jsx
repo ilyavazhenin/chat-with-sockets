@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
-import DeleteChannelModal from './DeleteChannelModal';
+// import DeleteChannelModal from './DeleteChannelModal';
+import UniversalModal from '../modals/UniversalModal';
 
 const DeleteChannelBtn = (props) => {
   const { t } = useTranslation();
@@ -17,10 +18,11 @@ const DeleteChannelBtn = (props) => {
       >
         {t('chat.deleteChannel')}
       </button>
-      <DeleteChannelModal
+      <UniversalModal
         show={modalShow}
         onHide={() => setModalShow(false)}
-        channelId={channelId}
+        currentchannel={channelId}
+        modalType="delete"
       />
     </>
   );
