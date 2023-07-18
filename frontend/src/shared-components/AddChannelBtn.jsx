@@ -1,13 +1,30 @@
-import { useState } from 'react';
+// import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import UniversalModal from './UniversalModal';
+import { actions as modalsActions } from '../slices/modalsSlices';
 
 const AddChannelButton = () => {
-  const [modalShow, setModalShow] = useState(false);
+  const dispatch = useDispatch();
+  const { t } = useTranslation();
+  const modalState = useSelector((state) => state.modals);
+
+  const addChannelModalConfig = {
+    title: t('chat.modals.addChannel'),
+    actionButton: t('chat.modals.send'),
+    actionVariant: 'primary',
+    fieldsShow: true,
+    modalType: 'create',
+  };
+
+  const openAddChannelModal = () => {
+    dispatch(modalsActions.showModal(addChannelModalConfig));
+  };
 
   return (
     <>
       <button
-        onClick={() => setModalShow(true)}
+        onClick={() => openAddChannelModal()}
         type="button"
         className="p-0 text-primary btn btn-group-vertical"
       >
@@ -25,9 +42,8 @@ const AddChannelButton = () => {
       </button>
 
       <UniversalModal
-        show={modalShow}
-        onHide={() => setModalShow(false)}
-        modalType="create"
+        show={modalState.isOpened}
+        onHide={() => dispatch(modalsActions.closeModal(modalState))}
       />
     </>
   );

@@ -19,46 +19,24 @@ const UniversalModal = (props) => {
   const { currentUser } = useUser();
   const channels = useSelector(selectors.selectAll);
   const channelsNames = channels.map((channel) => channel.name);
-
+  const modalState = useSelector((state) => state.modals);
   const {
-    currentchannel,
-    onHide,
-    show,
+    title,
+    actionButton,
+    actionVariant,
+    fieldsShow,
+    bodyText,
     modalType,
-  } = props;
+    currentchannel,
+  } = modalState.modalConfig;
+
+  const { onHide, show } = props;
 
   const handleDelete = (id) => async (e) => {
     e.preventDefault();
     await removeChannel({ id }, notify);
     onHide();
   };
-
-  const getModalFillings = () => {
-    switch (modalType) {
-      case 'rename': return ({
-        title: t('chat.modals.renameChannel'),
-        actionButton: t('chat.modals.send'),
-        actionVariant: 'primary',
-        fieldsShow: true,
-      });
-      case 'create': return ({
-        title: t('chat.modals.addChannel'),
-        actionButton: t('chat.modals.send'),
-        actionVariant: 'primary',
-        fieldsShow: true,
-      });
-      case 'delete': return ({
-        title: t('chat.modals.deleteChannel'),
-        bodyText: t('chat.modals.areYouSure'),
-        actionButton: t('chat.modals.delete'),
-        actionVariant: 'danger',
-        fieldsShow: false,
-      });
-      default: return null;
-    }
-  };
-
-  const modalFillings = getModalFillings();
 
   const formik = useFormik({
     initialValues: {
@@ -112,15 +90,13 @@ const UniversalModal = (props) => {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          {modalFillings.title}
+          {title}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {modalFillings.bodyText ?? null}
+        {bodyText ?? null}
         <Form onSubmit={formik.handleSubmit}>
-          {
-        modalFillings.fieldsShow
-          ? (
+          {fieldsShow ? (
             <Form.Group
               className="mb-3"
               controlId="channelName"
@@ -142,11 +118,10 @@ const UniversalModal = (props) => {
                 ) : null}
               </Form.Text>
             </Form.Group>
-          ) : null
-}
+          ) : null}
           <Modal.Footer
             xs="auto"
-            className="justify-content-end"
+            className="justify-content-end border-0"
           >
             <Button
               onClick={onHide}
@@ -155,10 +130,10 @@ const UniversalModal = (props) => {
               {t('chat.modals.cancel')}
             </Button>
             <Button
-              variant={modalFillings.actionVariant}
-              onClick={modalType === 'delete' ? handleDelete(currentchannel) : formik.handleSubmit}
+              variant={actionVariant}
+              onClick={modalType === 'delete' ? handleDelete(currentchannel.id) : formik.handleSubmit}
             >
-              {modalFillings.actionButton}
+              {actionButton}
             </Button>
           </Modal.Footer>
         </Form>
