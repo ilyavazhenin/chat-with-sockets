@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 // import DeleteChannelModal from './DeleteChannelModal';
-import UniversalModal from '../modals/UniversalModal';
+import UniversalModal from './UniversalModal';
 
 const DeleteChannelBtn = (props) => {
   const { t } = useTranslation();

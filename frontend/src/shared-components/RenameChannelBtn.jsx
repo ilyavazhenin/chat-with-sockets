@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectors } from '../../slices/channelsSlice.js';
-import UniversalModal from '../modals/UniversalModal.jsx';
+import { selectors } from '../slices/channelsSlice.js';
+import UniversalModal from './UniversalModal.jsx';
 
 // import RenameChannelModal from './RenameChannelModal';
 

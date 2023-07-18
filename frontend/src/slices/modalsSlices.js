@@ -1,17 +1,25 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  deleteChannelModalShow: { show: false, config: {} },
-  renameChannelModalShow: { show: false, config: {} },
-  createChannelModalShow: { show: false, config: {} },
+  modalConfig: { },
+  isOpened: false,
 };
 
 const modalsSlice = createSlice({
   name: 'modals',
   initialState,
   reducers: {
-    showModal: (state, modalTypeShow, action) => ({ ...state, [modalTypeShow]: action.payload }),
-    closeModal: (state, modalTypeShow, action) => ({ ...state, [modalTypeShow]: action.payload }),
+    showModal: (state, modalType, action) => ({
+      ...state,
+      [modalType]: action.payload,
+      isOpened: true,
+    }),
+
+    closeModal: (state, modalType, action) => ({
+      ...state,
+      [modalType]: action.payload,
+      isOpened: false,
+    }),
   },
 });
 

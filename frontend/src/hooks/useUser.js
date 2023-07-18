@@ -5,7 +5,7 @@ const useUser = (userData = undefined) => { // put user into userSlice or/and re
   const dispatch = useDispatch();
   let currentUser = useSelector((state) => userSelectors.selectById(state, 1));
 
-  if (!currentUser) { // if no user to set, get current one from Storage
+  if (!userData) { // if no user to set, get current one from Storage
     currentUser = {
       id: 1,
       userName: localStorage.getItem('userName'),

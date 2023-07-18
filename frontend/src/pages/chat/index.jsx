@@ -18,14 +18,13 @@ import socketInstance from '../../utils/socket-init';
 const ChatMain = () => {
   const { t } = useTranslation();
   const navigateToLogin = useNavigate();
-
   const { currentUser } = useUser();
-
   const dispatch = useDispatch();
   const messages = useSelector(msgSelectors.selectAll);
   const activeChannel = useSelector((state) => state.channels.activeChannel);
 
   useEffect(() => {
+    socketInstance.connect();
     socketInstance.on('removeChannel', (data) => {
       const messagesIdsToDelete = messages
         .filter((msg) => msg.relatedChannelId === data.id)
@@ -62,7 +61,7 @@ const ChatMain = () => {
     socketInstance.on('connect_error', () => {
       notify.onLoadingDataError(t('chat.toast.loadError'), navigateToLogin);
     });
-  }, [socketInstance]);
+  }, [socketInstance, useUser, dispatch]);
 
   useEffect(() => {
     const response = axios({ method: 'get', url: routes.data, headers: { Authorization: `Bearer ${currentUser?.token}` } });

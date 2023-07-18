@@ -4,20 +4,18 @@ import Modal from 'react-bootstrap/Modal';
 import { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
-// import Col from 'react-bootstrap/Col';
-// import Row from 'react-bootstrap/Row';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
-import { selectors } from '../../slices/channelsSlice.js';
-import notify from '../../utils/toast-notifier';
-import { addChannelSchema } from '../../utils/yup-schemas';
-import useSocket from '../../hooks/useSocket';
-import socket from '../../utils/socket-init';
-import useUser from '../../hooks/useUser';
+import { selectors } from '../slices/channelsSlice';
+import notify from '../utils/toast-notifier';
+import { addChannelSchema } from '../utils/yup-schemas';
+import useSocket from '../hooks/useSocket';
+import socketInstance from '../utils/socket-init';
+import useUser from '../hooks/useUser';
 
 const UniversalModal = (props) => {
   const { t } = useTranslation();
-  const { renameChannel, createChannel, removeChannel } = useSocket(socket);
+  const { renameChannel, createChannel, removeChannel } = useSocket(socketInstance);
   const { currentUser } = useUser();
   const channels = useSelector(selectors.selectAll);
   const channelsNames = channels.map((channel) => channel.name);
@@ -150,23 +148,18 @@ const UniversalModal = (props) => {
             xs="auto"
             className="justify-content-end"
           >
-            {/* <Col> */}
             <Button
               onClick={onHide}
               variant="secondary"
             >
               {t('chat.modals.cancel')}
             </Button>
-            {/* </Col> */}
-            {/* <Col> */}
             <Button
-              // type="submit"
               variant={modalFillings.actionVariant}
               onClick={modalType === 'delete' ? handleDelete(currentchannel) : formik.handleSubmit}
             >
               {modalFillings.actionButton}
             </Button>
-            {/* </Col> */}
           </Modal.Footer>
         </Form>
       </Modal.Body>

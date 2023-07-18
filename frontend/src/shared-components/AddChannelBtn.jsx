@@ -1,14 +1,8 @@
 import { useState } from 'react';
-// import { useSelector } from 'react-redux';
-// import { selectors } from '../../slices/channelsSlice.js';
-import UniversalModal from '../modals/UniversalModal.jsx';
-// import AddChannelModal from './AddChannelModal';
+import UniversalModal from './UniversalModal';
 
 const AddChannelButton = () => {
   const [modalShow, setModalShow] = useState(false);
-
-  // const channels = useSelector(selectors.selectAll);
-  // const channelsNames = channels.map((channel) => channel.name);
 
   return (
     <>

@@ -1,6 +1,6 @@
 import Dropdown from 'react-bootstrap/Dropdown';
-import RenameChannelBtn from '../../../shared-components/rename-channel/RenameChannelBtn.jsx';
-import DeleteChannelBtn from '../../../shared-components/delete-channel/DeleteChannelBtn.jsx';
+import RenameChannelBtn from '../../../shared-components/RenameChannelBtn.jsx';
+import DeleteChannelBtn from '../../../shared-components/DeleteChannelBtn.jsx';
 
 const ChannelControlDropdown = (props) => {
   const { active, channelId } = props;

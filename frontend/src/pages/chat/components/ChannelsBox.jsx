@@ -2,7 +2,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { selectors, actions as channelsActions } from '../../../slices/channelsSlice.js';
-import AddChannelBtn from '../../../shared-components/add-channel/AddChannelBtn.jsx';
+import AddChannelBtn from '../../../shared-components/AddChannelBtn.jsx';
 import ChannelControlDropdown from './ChannelControlDroprown.jsx';
 import socket from '../../../utils/socket-init.js';
 
