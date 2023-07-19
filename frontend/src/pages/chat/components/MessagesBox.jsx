@@ -98,6 +98,7 @@ const MessagesBox = () => {
                 name="message"
                 size="sm"
                 type="text"
+                aria-label="Новое сообщение"
                 placeholder={t('chat.enterMessage')}
                 value={formik.values.message || ''}
                 onChange={formik.handleChange}
