@@ -10,10 +10,12 @@ import ChannelsBox from './components/ChannelsBox';
 import MessagesBox from './components/MessagesBox';
 import { actions as channelsActions } from '../../slices/channelsSlice';
 import { actions as messagesActions } from '../../slices/messagesSlice';
+import { actions as modalsActions } from '../../slices/modalsSlices';
 import notify from '../../utils/toast-notifier';
 import routes from '../../utils/routes';
 import useUser from '../../hooks/useUser';
 import socketInstance from '../../utils/socket-init';
+import UniversalModal from '../../shared-components/UniversalModal';
 
 const ChatMain = () => {
   const { t } = useTranslation();
@@ -21,6 +23,7 @@ const ChatMain = () => {
   const { currentUser } = useUser();
   const dispatch = useDispatch();
   const activeChannel = useSelector((state) => state.channels.activeChannel);
+  const modalState = useSelector((state) => state.modals);
 
   useEffect(() => {
     socketInstance.connect();
@@ -81,6 +84,10 @@ const ChatMain = () => {
           </div>
         </div>
       </div>
+      <UniversalModal
+        show={modalState.isOpened}
+        onHide={() => dispatch(modalsActions.closeModal(false))}
+      />
     </div>
   );
 };

@@ -1,7 +1,6 @@
 import { io } from 'socket.io-client';
 
 const socket = io({
-  // closeOnBeforeunload: true,
   autoConnect: false,
   transportOptions: {
     webtransport: {

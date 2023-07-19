@@ -1,11 +1,7 @@
 import { useTranslation } from 'react-i18next';
-// import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectors } from '../slices/channelsSlice.js';
 import { actions as modalsActions } from '../slices/modalsSlices';
-import UniversalModal from './UniversalModal.jsx';
-
-// import RenameChannelModal from './RenameChannelModal';
 
 const RenameChannelButton = (props) => {
   const { t } = useTranslation();
@@ -13,7 +9,6 @@ const RenameChannelButton = (props) => {
   const channels = useSelector(selectors.selectAll);
   const currentchannel = channels.find((el) => el.id === channelId);
   const dispatch = useDispatch();
-  const modalState = useSelector((state) => state.modals);
 
   const RenameChannelModalConfig = {
     title: t('chat.modals.renameChannel'),
@@ -29,19 +24,13 @@ const RenameChannelButton = (props) => {
   };
 
   return (
-    <>
-      <button
-        onClick={() => openRenameChannelModal()}
-        type="button"
-        className="p-0 text-primary btn btn-group-vertical w-100"
-      >
-        {t('chat.renameChannel')}
-      </button>
-      <UniversalModal
-        show={modalState.isOpened}
-        onHide={() => dispatch(modalsActions.closeModal(modalState))}
-      />
-    </>
+    <button
+      onClick={() => openRenameChannelModal()}
+      type="button"
+      className="p-0 text-primary btn btn-group-vertical w-100"
+    >
+      {t('chat.renameChannel')}
+    </button>
   );
 };
 
