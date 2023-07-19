@@ -2,9 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import socketInstance from './utils/socket-init';
-
-socketInstance.connect();
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

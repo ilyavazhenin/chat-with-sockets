@@ -31,7 +31,6 @@ const onLoadingDataError = (msg, navigate) => toast.error(msg, {
   ...toastSettings,
   autoClose: 3000,
   onClose: () => {
-    console.log('navigatin');
     localStorage.clear();
     return navigate('/login');
   },

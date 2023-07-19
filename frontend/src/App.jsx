@@ -25,10 +25,11 @@ const App = () => {
   filter.add(filter.getDictionary('en'));
   filter.add(filter.getDictionary('ru'));
 
-  useEffect(() => () => {
-    console.log('UNMOUNTING');
-    // socketInstance.disconnect();
-    console.log(socketInstance, 'socket after close');
+  useEffect(() => {
+    socketInstance.connect();
+    return () => {
+      socketInstance.disconnect();
+    };
   }, []);
 
   return (
