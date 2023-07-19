@@ -4,16 +4,15 @@ import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import { useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
-import { actions } from '../../../slices/userSlice';
 import handleReg from '../utils/handleReg';
 import { registerSchema } from '../../../utils/yup-schemas';
+import useUser from '../../../hooks/useUser';
 
 const RegisterForm = () => {
   const { t } = useTranslation();
   const nameRef = useRef();
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { setUser } = useUser();
 
   const formik = useFormik({
     initialValues: {
@@ -25,7 +24,7 @@ const RegisterForm = () => {
     onSubmit: async () => {
       const user = await handleReg(formik, t);
       if (user?.token) {
-        dispatch(actions.addCurrentUser(user));
+        setUser(user);
         navigate('/');
       }
     },

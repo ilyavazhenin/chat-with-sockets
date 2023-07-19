@@ -26,7 +26,6 @@ const App = () => {
   filter.add(filter.getDictionary('ru'));
   useEffect(() => {
     socketInstance.connect();
-    console.log(socketInstance);
     return () => {
       socketInstance.disconnect();
     };

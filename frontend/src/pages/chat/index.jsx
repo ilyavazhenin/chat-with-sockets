@@ -27,7 +27,6 @@ const ChatMain = () => {
 
   useEffect(() => {
     socketInstance.connect();
-    console.log(socketInstance);
     socketInstance.on('removeChannel', (data) => {
       dispatch(channelsActions.deleteChannel(data.id));
       dispatch(channelsActions.setActiveChannel({ id: 1, name: 'general' }));

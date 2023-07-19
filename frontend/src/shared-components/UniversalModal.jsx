@@ -44,9 +44,8 @@ const UniversalModal = (props) => {
     },
     validationSchema: addChannelSchema(channelsNames),
     onSubmit: async (values) => {
-      let payload;
       if (modalType === 'rename') {
-        payload = {
+        const payload = {
           ...currentchannel,
           name: values.channelName,
         };
@@ -54,7 +53,7 @@ const UniversalModal = (props) => {
       }
 
       if (modalType === 'create') {
-        payload = {
+        const payload = {
           name: values.channelName,
           createdByUser: currentUser.userName,
         };
