@@ -11,7 +11,7 @@ import NotFound from './pages/404';
 import LoginCard from './pages/login';
 import RegisterCard from './pages/registration';
 import ChatMain from './pages/chat';
-// import Navbar from './shared-components/Navbar';
+import Navbar from './shared-components/Navbar';
 import PrivateRoute from './utils/private-route-main';
 import store from './slices/index';
 import socketInstance from './utils/socket-init';
@@ -35,9 +35,8 @@ const App = () => {
     <RollbarProvider config={rollbarConfig}>
       <ErrorBoundary>
         <Provider store={store}>
-
           <BrowserRouter>
-            {/* <Navbar /> */}
+            <Navbar />
             <Routes>
               <Route
                 index
