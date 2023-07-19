@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import ChannelsBox from './components/ChannelsBox';
 import MessagesBox from './components/MessagesBox';
 import { actions as channelsActions } from '../../slices/channelsSlice';
-import { actions as messagesActions, msgSelectors } from '../../slices/messagesSlice';
+import { actions as messagesActions } from '../../slices/messagesSlice';
 import notify from '../../utils/toast-notifier';
 import routes from '../../utils/routes';
 import useUser from '../../hooks/useUser';
@@ -20,17 +20,12 @@ const ChatMain = () => {
   const navigateToLogin = useNavigate();
   const { currentUser } = useUser();
   const dispatch = useDispatch();
-  const messages = useSelector(msgSelectors.selectAll);
   const activeChannel = useSelector((state) => state.channels.activeChannel);
 
   useEffect(() => {
     socketInstance.connect();
     socketInstance.on('removeChannel', (data) => {
-      const messagesIdsToDelete = messages
-        .filter((msg) => msg.relatedChannelId === data.id)
-        .map((m) => m.id);
       dispatch(channelsActions.deleteChannel(data.id));
-      dispatch(messagesActions.deleteMessagesByChannel(messagesIdsToDelete));
       dispatch(channelsActions.setActiveChannel({ id: 1, name: 'general' }));
       notify.onChannelRemoved(t('chat.toast.channelDeleted'));
     });

@@ -35,6 +35,7 @@ const App = () => {
     <RollbarProvider config={rollbarConfig}>
       <ErrorBoundary>
         <Provider store={store}>
+
           <BrowserRouter>
             <Navbar />
             <Routes>
