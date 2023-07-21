@@ -1,7 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react/jsx-no-constructed-context-values */
-import './App.css';
-
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { useEffect } from 'react';
@@ -12,9 +8,10 @@ import LoginCard from './pages/login';
 import RegisterCard from './pages/registration';
 import ChatMain from './pages/chat';
 import Navbar from './shared-components/Navbar';
-import PrivateRoute from './utils/private-route-main';
+import PrivateRoute from './pages/chat/components/PrivateRouteForChat';
 import store from './slices/index';
 import socketInstance from './utils/socket-init';
+import './App.css';
 
 const rollbarConfig = {
   accessToken: process.env.REACT_APP_ROLLBAR_TOKEN,

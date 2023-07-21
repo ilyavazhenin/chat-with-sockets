@@ -1,27 +1,24 @@
 import * as Yup from 'yup';
 import { i18inst } from '../i18n';
 
-const from3to20symbError = i18inst.t('chat.errors.from3to20symbls');
-const requiredError = i18inst.t('general.errors.requiredField');
-
 const addChannelSchema = (existedChannels) => Yup.object({
   channelName: Yup.string()
-    .min(3, from3to20symbError)
-    .max(20, from3to20symbError)
+    .min(3, i18inst.t('chat.errors.from3to20symbls'))
+    .max(20, i18inst.t('general.errors.requiredField'))
     .required(i18inst.t('general.errors.requiredField'))
     .notOneOf(existedChannels, i18inst.t('chat.errors.uniqueChannel')),
 });
 
 const registerSchema = () => Yup.object({
   nickname: Yup.string()
-    .min(3, from3to20symbError)
-    .max(20, from3to20symbError)
-    .required(requiredError),
+    .min(3, i18inst.t('chat.errors.from3to20symbls'))
+    .max(20, i18inst.t('chat.errors.from3to20symbls'))
+    .required(i18inst.t('general.errors.requiredField')),
   password: Yup.string()
     .min(6, i18inst.t('signup.errors.noLessThan6symbls'))
-    .required(requiredError),
+    .required(i18inst.t('general.errors.requiredField')),
   confirmPassword: Yup.string()
-    .required(requiredError)
+    .required(i18inst.t('general.errors.requiredField'))
     .oneOf([Yup.ref('password')], i18inst.t('signup.errors.pswrdsMustMatch')),
 });
 
