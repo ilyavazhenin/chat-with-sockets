@@ -29,8 +29,10 @@ const ChatMain = () => {
     socketInstance.connect();
     socketInstance.on('removeChannel', (data) => {
       dispatch(channelsActions.deleteChannel(data.id));
-      dispatch(channelsActions.setActiveChannel({ id: 1, name: 'general' }));
       notify.onChannelRemoved(t('chat.toast.channelDeleted'));
+      if (activeChannel.id === data.id) {
+        dispatch(channelsActions.setActiveChannel({ id: 1, name: 'general', removable: false }));
+      }
     });
 
     socketInstance.on('renameChannel', (renamedChannel) => {
@@ -59,7 +61,8 @@ const ChatMain = () => {
     socketInstance.on('connect_error', () => {
       notify.onLoadingDataError(t('chat.toast.loadError'), navigateToLogin);
     });
-  }, [socketInstance, useUser, dispatch]);
+    return () => socketInstance.removeAllListeners();
+  }, [socketInstance, activeChannel]);
 
   useEffect(() => {
     const response = axios({ method: 'get', url: routes.data, headers: { Authorization: `Bearer ${currentUser?.token}` } });
@@ -70,8 +73,7 @@ const ChatMain = () => {
       .catch(() => {
         notify.onLoadingDataError(t('chat.toast.loadError'));
       });
-    return () => socketInstance.removeAllListeners();
-  }, [dispatch, socketInstance]);
+  }, [socketInstance]);
 
   return (
     <div className="h-100" id="chat">
