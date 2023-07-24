@@ -85,7 +85,7 @@ const ChatMain = () => {
       </div>
       <UniversalModal
         show={modalState.isOpened}
-        onHide={() => dispatch(modalsActions.closeModal(false))}
+        onHide={() => dispatch(modalsActions.closeModal())}
       />
     </div>
   );
