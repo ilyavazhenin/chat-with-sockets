@@ -68,11 +68,9 @@ const UniversalModal = (props) => {
 
   useEffect(() => {
     if (inputRef.current) {
-      setTimeout(() => {
-        inputRef.current.value = currentchannel?.name ?? '';
-        inputRef.current.focus();
-        inputRef.current.select();
-      }, 0);
+      inputRef.current.value = currentchannel?.name ?? '';
+      inputRef.current.focus();
+      inputRef.current.select();
     }
   }, [show]);
 
