@@ -53,7 +53,7 @@ const MessagesBox = () => {
 
   useEffect(() => {
     bottomRef.current.scrollIntoView();
-  });
+  }, [messages]);
 
   return (
     <div className="col p-0 h-100">
