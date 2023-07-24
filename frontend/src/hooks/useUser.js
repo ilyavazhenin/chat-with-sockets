@@ -3,7 +3,6 @@ import { actions, userSelectors } from '../slices/userSlice';
 
 const useUser = () => {
   const dispatch = useDispatch();
-  // if (!userFromStore.token) {
   const userFromLocalStorage = { // if there is no user in state, but there is one in LS
     id: 1,
     userName: localStorage.getItem('userName'),

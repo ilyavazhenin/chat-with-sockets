@@ -70,6 +70,7 @@ const ChatMain = () => {
       .catch(() => {
         notify.onLoadingDataError(t('chat.toast.loadError'));
       });
+    return () => socketInstance.removeAllListeners();
   }, [dispatch, socketInstance]);
 
   return (
