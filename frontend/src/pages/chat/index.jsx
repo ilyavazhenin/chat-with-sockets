@@ -26,7 +26,7 @@ const ChatMain = () => {
   const modalState = useSelector((state) => state.modals);
 
   useEffect(() => {
-    socketInstance.connect();
+    // socketInstance.connect();
     socketInstance.on('removeChannel', (data) => {
       dispatch(channelsActions.deleteChannel(data.id));
       notify.onChannelRemoved(t('chat.toast.channelDeleted'));
