@@ -9,7 +9,12 @@ const useUser = () => {
     token: localStorage.getItem('token'),
   };
 
-  const setUser = (user) => dispatch(actions.addCurrentUser(user));
+  const setUser = (user) => {
+    localStorage.setItem('token', user.token);
+    localStorage.setItem('userName', user.userName);
+    dispatch(actions.addCurrentUser(user));
+  };
+
   const currentUser = useSelector((state) => userSelectors.selectById(state, 1));
 
   return ({

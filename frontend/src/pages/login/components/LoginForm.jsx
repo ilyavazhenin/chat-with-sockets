@@ -1,12 +1,13 @@
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useFormik } from 'formik';
+import axios from 'axios';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import { useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import handleLogin from '../utils/handleLogin';
 import useUser from '../../../hooks/useUser';
+import routes from '../../../utils/routes';
 
 const LoginForm = () => {
   const { t } = useTranslation();
@@ -27,10 +28,24 @@ const LoginForm = () => {
         .required(requiredError),
     }),
     onSubmit: async () => {
-      const user = await handleLogin(formik, t);
-      if (user?.token) {
-        setUser(user);
-        navigate('/');
+      try {
+        const response = await axios.post(routes.login, {
+          username: formik.values.nickname,
+          password: formik.values.password,
+        });
+
+        if (response.status === 200) {
+          const { token } = response.data;
+          const userName = formik.values.nickname;
+          const authorizedUser = { id: 1, userName, token };
+          setUser(authorizedUser);
+          navigate('/');
+        }
+      } catch (e) {
+        const errors = {};
+        if (e.code === 'ERR_BAD_REQUEST') errors.password = t('login.errors.wrongCredentials');
+        else errors.password = t('general.errors.badNetwork');
+        formik.setErrors(errors);
       }
     },
   });

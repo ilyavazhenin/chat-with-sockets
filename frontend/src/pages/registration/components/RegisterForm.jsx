@@ -4,9 +4,10 @@ import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import { useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import handleReg from '../utils/handleReg';
+import axios from 'axios';
 import { registerSchema } from '../../../utils/yup-schemas';
 import useUser from '../../../hooks/useUser';
+import routes from '../../../utils/routes';
 
 const RegisterForm = () => {
   const { t } = useTranslation();
@@ -22,10 +23,24 @@ const RegisterForm = () => {
     },
     validationSchema: registerSchema(),
     onSubmit: async () => {
-      const user = await handleReg(formik, t);
-      if (user?.token) {
-        setUser(user);
-        navigate('/');
+      try {
+        const response = await axios.post(routes.signup, {
+          username: formik.values.nickname,
+          password: formik.values.password,
+        });
+
+        if (response.status === 201) {
+          const { token } = response.data;
+          const userName = formik.values.nickname;
+          const authorizedUser = { id: 1, userName, token };
+          setUser(authorizedUser);
+          navigate('/');
+        }
+      } catch (e) {
+        const errors = {};
+        if (e.response.status === 409) errors.nickname = t('signup.errors.userExists');
+        else errors.nickname = t('general.errors.badNetwork');
+        formik.setErrors(errors);
       }
     },
   });

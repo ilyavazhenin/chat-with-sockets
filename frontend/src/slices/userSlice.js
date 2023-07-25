@@ -7,7 +7,7 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    addCurrentUser: userAdapter.addOne,
+    addCurrentUser: userAdapter.setOne,
     removeCurrentUser: userAdapter.removeOne,
   },
 });
