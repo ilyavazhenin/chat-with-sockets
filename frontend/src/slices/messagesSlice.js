@@ -1,5 +1,5 @@
 import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
-import { actions as channelsActions } from './channelsSlice';
+import { actions as channelsActions, fetchExistedChatData } from './channelsSlice';
 
 const messagesAdapter = createEntityAdapter();
 const initialState = messagesAdapter.getInitialState();
@@ -17,6 +17,10 @@ const messagesSlice = createSlice({
         const restMessages = Object.values(state.entities)
           .filter(({ relatedChannelId }) => relatedChannelId !== action.payload);
         messagesAdapter.setAll(state, restMessages);
+      })
+      .addCase(fetchExistedChatData.fulfilled, (state, action) => {
+        const { messages } = action.payload;
+        messagesAdapter.setAll(state, messages);
       });
   },
 });

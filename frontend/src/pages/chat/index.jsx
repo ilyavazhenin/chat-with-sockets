@@ -1,18 +1,14 @@
-/* eslint-disable react/jsx-no-constructed-context-values */
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { ToastContainer } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import ChannelsBox from './components/ChannelsBox';
 import MessagesBox from './components/MessagesBox';
-import { actions as channelsActions } from '../../slices/channelsSlice';
+import { actions as channelsActions, fetchExistedChatData } from '../../slices/channelsSlice';
 import { actions as messagesActions } from '../../slices/messagesSlice';
 import { actions as modalsActions } from '../../slices/modalsSlices';
 import notify from '../../utils/toast-notifier';
-import routes from '../../utils/routes';
 import useUser from '../../hooks/useUser';
 import socketInstance from '../../utils/socket-init';
 import UniversalModal from '../../shared-components/UniversalModal';
@@ -26,7 +22,6 @@ const ChatMain = () => {
   const modalState = useSelector((state) => state.modals);
 
   useEffect(() => {
-    // socketInstance.connect();
     socketInstance.on('removeChannel', (data) => {
       dispatch(channelsActions.deleteChannel(data.id));
       notify.onChannelRemoved(t('chat.toast.channelDeleted'));
@@ -62,18 +57,15 @@ const ChatMain = () => {
       notify.onLoadingDataError(t('chat.toast.loadError'), navigateToLogin);
     });
     return () => socketInstance.removeAllListeners();
-  }, [socketInstance, activeChannel]);
+  }, [activeChannel, currentUser, dispatch, navigateToLogin, t]);
 
   useEffect(() => {
-    const response = axios({ method: 'get', url: routes.data, headers: { Authorization: `Bearer ${currentUser?.token}` } });
-    response.then((data) => {
-      dispatch(channelsActions.addChannels(data.data.channels));
-      dispatch(messagesActions.addMessages(data.data.messages));
-    })
-      .catch(() => {
-        notify.onLoadingDataError(t('chat.toast.loadError'));
-      });
-  }, [socketInstance]);
+    try {
+      dispatch(fetchExistedChatData(currentUser));
+    } catch {
+      notify.onLoadingDataError(t('chat.toast.loadError'));
+    }
+  }, [currentUser, dispatch, t]);
 
   return (
     <div className="h-100" id="chat">
