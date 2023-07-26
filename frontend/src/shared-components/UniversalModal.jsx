@@ -27,8 +27,10 @@ const UniversalModal = (props) => {
     fieldsShow,
     bodyText,
     modalType,
-    currentchannel,
+    channelId,
   } = modalState.modalConfig;
+
+  const currentchannel = channels.find((el) => el.id === channelId);
 
   const { onHide, show } = props;
 

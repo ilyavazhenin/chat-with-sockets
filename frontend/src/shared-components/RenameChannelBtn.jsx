@@ -1,13 +1,10 @@
 import { useTranslation } from 'react-i18next';
-import { useSelector, useDispatch } from 'react-redux';
-import { selectors } from '../slices/channelsSlice.js';
+import { useDispatch } from 'react-redux';
 import { actions as modalsActions } from '../slices/modalsSlices';
 
 const RenameChannelButton = (props) => {
   const { t } = useTranslation();
   const { channelId } = props;
-  const channels = useSelector(selectors.selectAll);
-  const currentchannel = channels.find((el) => el.id === channelId);
   const dispatch = useDispatch();
 
   const RenameChannelModalConfig = {
@@ -16,7 +13,7 @@ const RenameChannelButton = (props) => {
     actionVariant: 'primary',
     fieldsShow: true,
     modalType: 'rename',
-    currentchannel,
+    channelId,
   };
 
   const openRenameChannelModal = () => {

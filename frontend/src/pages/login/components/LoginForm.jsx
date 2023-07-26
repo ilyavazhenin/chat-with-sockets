@@ -37,7 +37,7 @@ const LoginForm = () => {
         if (response.status === 200) {
           const { token } = response.data;
           const userName = formik.values.nickname;
-          const authorizedUser = { id: 1, userName, token };
+          const authorizedUser = { userName, token };
           setUser(authorizedUser);
           navigate('/');
         }

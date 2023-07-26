@@ -32,7 +32,7 @@ const RegisterForm = () => {
         if (response.status === 201) {
           const { token } = response.data;
           const userName = formik.values.nickname;
-          const authorizedUser = { id: 1, userName, token };
+          const authorizedUser = { userName, token };
           setUser(authorizedUser);
           navigate('/');
         }

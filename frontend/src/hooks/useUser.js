@@ -1,10 +1,9 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { actions, userSelectors } from '../slices/userSlice';
+import { actions } from '../slices/userSlice';
 
 const useUser = () => {
   const dispatch = useDispatch();
   const userFromLocalStorage = { // if there is no user in state, but there is one in LS
-    id: 1,
     userName: localStorage.getItem('userName'),
     token: localStorage.getItem('token'),
   };
@@ -15,7 +14,7 @@ const useUser = () => {
     dispatch(actions.addCurrentUser(user));
   };
 
-  const currentUser = useSelector((state) => userSelectors.selectById(state, 1));
+  const currentUser = useSelector((state) => state.user);
 
   return ({
     currentUser: currentUser ?? userFromLocalStorage,
