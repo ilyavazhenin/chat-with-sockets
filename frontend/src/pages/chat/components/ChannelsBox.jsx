@@ -1,10 +1,8 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { selectors, actions as channelsActions } from '../../../slices/channelsSlice.js';
 import AddChannelBtn from '../../../shared-components/AddChannelBtn.jsx';
 import ChannelControlDropdown from './ChannelControlDroprown.jsx';
-import socket from '../../../utils/socket-init.js';
 
 const ChannelsBox = () => {
   const activeChannel = useSelector((state) => state.channels.activeChannel);
@@ -21,7 +19,7 @@ const ChannelsBox = () => {
     <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
       <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
         <b>{t('chat.channelsHeader')}</b>
-        <AddChannelBtn socket={socket} />
+        <AddChannelBtn />
       </div>
       <ul id="channels-box" className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">
         { channels.map((channel) => (
@@ -43,7 +41,6 @@ const ChannelsBox = () => {
                     <ChannelControlDropdown
                       active={isChannelActive(channel.id)}
                       channelId={channel.id}
-                      socket={socket}
                     />
                   )
                   : null

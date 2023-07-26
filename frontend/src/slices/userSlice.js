@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  userName: null,
-  token: null,
+  userName: localStorage.getItem('userName'),
+  token: localStorage.getItem('token'),
 };
 
 const userSlice = createSlice({
@@ -13,11 +13,6 @@ const userSlice = createSlice({
       ...state,
       userName: action.payload.userName,
       token: action.payload.token,
-    }),
-    removeCurrentUser: (state) => ({
-      ...state,
-      userName: null,
-      token: null,
     }),
   },
 });

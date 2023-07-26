@@ -7,22 +7,9 @@ const RenameChannelButton = (props) => {
   const { channelId } = props;
   const dispatch = useDispatch();
 
-  const RenameChannelModalConfig = {
-    title: t('chat.modals.renameChannel'),
-    actionButton: t('chat.modals.send'),
-    actionVariant: 'primary',
-    fieldsShow: true,
-    modalType: 'rename',
-    channelId,
-  };
-
-  const openRenameChannelModal = () => {
-    dispatch(modalsActions.showModal(RenameChannelModalConfig));
-  };
-
   return (
     <button
-      onClick={() => openRenameChannelModal()}
+      onClick={() => dispatch(modalsActions.showModal({ modalType: 'renameChannel', channelId }))}
       type="button"
       className="p-0 text-primary btn btn-group-vertical w-100"
     >

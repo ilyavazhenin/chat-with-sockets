@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  modalConfig: { },
+  modalType: '',
+  channelId: null,
   isOpened: false,
 };
 
@@ -9,16 +10,14 @@ const modalsSlice = createSlice({
   name: 'modals',
   initialState,
   reducers: {
-    showModal: (state, action) => ({
+    showModal: (state, { payload }) => ({
       ...state,
-      modalConfig: action.payload,
+      modalType: payload.modalType,
+      channelId: payload.channelId,
       isOpened: true,
     }),
 
-    closeModal: () => ({
-      modalConfig: { }, // clearing the config
-      isOpened: false,
-    }),
+    closeModal: () => ({ initialState }),
   },
 });
 

@@ -1,26 +1,12 @@
 import { useDispatch } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 import { actions as modalsActions } from '../slices/modalsSlices';
 
 const AddChannelButton = () => {
   const dispatch = useDispatch();
-  const { t } = useTranslation();
-
-  const addChannelModalConfig = {
-    title: t('chat.modals.addChannel'),
-    actionButton: t('chat.modals.send'),
-    actionVariant: 'primary',
-    fieldsShow: true,
-    modalType: 'create',
-  };
-
-  const openAddChannelModal = () => {
-    dispatch(modalsActions.showModal(addChannelModalConfig));
-  };
 
   return (
     <button
-      onClick={() => openAddChannelModal()}
+      onClick={() => dispatch(modalsActions.showModal({ modalType: 'addChannel' }))}
       type="button"
       className="p-0 text-primary btn btn-group-vertical"
     >

@@ -7,23 +7,9 @@ const DeleteChannelBtn = (props) => {
   const dispatch = useDispatch();
   const { channelId } = props;
 
-  const deleteChannelModalConfig = {
-    title: t('chat.modals.deleteChannel'),
-    bodyText: t('chat.modals.areYouSure'),
-    actionButton: t('chat.modals.delete'),
-    actionVariant: 'danger',
-    fieldShow: false,
-    modalType: 'delete',
-    channelId,
-  };
-
-  const openDeleteChannelModal = () => {
-    dispatch(modalsActions.showModal(deleteChannelModalConfig));
-  };
-
   return (
     <button
-      onClick={() => openDeleteChannelModal()}
+      onClick={() => dispatch(modalsActions.showModal({ modalType: 'deleteChannel', channelId }))}
       type="button"
       className="p-0 text-danger btn btn-group-vertical w-100"
     >

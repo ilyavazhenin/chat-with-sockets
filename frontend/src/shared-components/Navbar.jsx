@@ -6,11 +6,11 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const currentLocation = useLocation();
-  const user = useUser();
+  const { setUser } = useUser();
 
   const logout = () => {
     localStorage.clear();
-    user.setUser({ id: null, userName: null, token: null });
+    setUser({ userName: null, token: null });
     navigate('/login');
   };
 
