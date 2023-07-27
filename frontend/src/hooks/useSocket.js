@@ -4,7 +4,7 @@ const useSocket = (socketInstance) => ({
   emitMessage: async (payload, notifyInst) => socketInstance.emit(
     'newMessage',
     payload,
-    async (respData) => {
+    (respData) => {
       if (respData.status !== 'ok') { notifyInst.onUnableToEmitEvent(i18inst.t('chat.toast.cantSendMsg')); }
     },
   ),
@@ -12,7 +12,7 @@ const useSocket = (socketInstance) => ({
   createChannel: async (payload, notifyInst) => socketInstance.emit(
     'newChannel',
     payload,
-    async (respData) => {
+    (respData) => {
       if (respData.status !== 'ok') notifyInst.onUnableToEmitEvent(i18inst.t('chat.toast.cantCreateChannel'));
     },
   ),
@@ -20,7 +20,7 @@ const useSocket = (socketInstance) => ({
   removeChannel: async (payload, notifyInst) => socketInstance.emit(
     'removeChannel',
     payload,
-    async (respData) => {
+    (respData) => {
       if (respData.status !== 'ok') notifyInst.onUnableToEmitEvent(i18inst.t('chat.toast.cantDeleteChannel'));
     },
   ),
@@ -28,7 +28,7 @@ const useSocket = (socketInstance) => ({
   renameChannel: async (payload, notifyInst) => socketInstance.emit(
     'renameChannel',
     payload,
-    async (respData) => {
+    (respData) => {
       if (respData.status !== 'ok') notifyInst.onUnableToEmitEvent(i18inst.t('chat.toast.cantRenameChannel'));
     },
   ),

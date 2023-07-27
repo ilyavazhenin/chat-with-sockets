@@ -21,10 +21,11 @@ const ChatMain = () => {
 
   useEffect(() => {
     socketInstance.on('removeChannel', (data) => {
+      const defaultChannel = { id: 1, name: 'general', removable: false };
       dispatch(channelsActions.deleteChannel(data.id));
       notify.onChannelRemoved(t('chat.toast.channelDeleted'));
       if (activeChannel.id === data.id) {
-        dispatch(channelsActions.setActiveChannel({ id: 1, name: 'general', removable: false }));
+        dispatch(channelsActions.setActiveChannel(defaultChannel));
       }
     });
 

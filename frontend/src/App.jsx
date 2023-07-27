@@ -19,9 +19,9 @@ const rollbarConfig = {
 };
 
 const App = () => {
-  filter.add(filter.getDictionary('en'));
-  filter.add(filter.getDictionary('ru'));
   useEffect(() => {
+    filter.add(filter.getDictionary('en'));
+    filter.add(filter.getDictionary('ru'));
     socketInstance.connect();
     return () => {
       socketInstance.disconnect();

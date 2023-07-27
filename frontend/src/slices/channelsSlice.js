@@ -5,9 +5,8 @@ import routes from '../utils/routes';
 const fetchExistedChatData = createAsyncThunk(
   'channels/getExistedChatData',
   async (user) => {
-    const response = axios({ method: 'get', url: routes.data, headers: { Authorization: `Bearer ${user?.token}` } });
-    const { data } = await response;
-    return data;
+    const response = await axios({ method: 'get', url: routes.data, headers: { Authorization: `Bearer ${user?.token}` } });
+    return response.data;
   },
 );
 
