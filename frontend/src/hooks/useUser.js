@@ -6,10 +6,7 @@ const useUser = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const userFromLocalStorage = { // if there is no user in state, but there is one in LS
-    userName: localStorage.getItem('userName'),
-    token: localStorage.getItem('token'),
-  };
+  const currentUser = useSelector((state) => state.user);
 
   const setUser = (user) => {
     localStorage.setItem('token', user.token);
@@ -19,14 +16,11 @@ const useUser = () => {
 
   const logoutUser = () => {
     localStorage.clear();
-    setUser({ userName: null, token: null });
     navigate('/login');
   };
 
-  const currentUser = useSelector((state) => state.user);
-
   return ({
-    currentUser: currentUser ?? userFromLocalStorage,
+    currentUser,
     setUser,
     logoutUser,
   });
