@@ -13,10 +13,10 @@ const DeleteModal = (props) => {
   const channels = useSelector(selectors.selectAll);
   const modalState = useSelector((state) => state.modals);
   const { isOpened, channelId } = modalState;
-  const currentchannel = channels.find((el) => el.id === channelId);
+  const { id } = channels.find((el) => el.id === channelId);
   const { onHide } = props;
 
-  const handleDelete = (id) => async (e) => {
+  const handleDelete = async (e) => {
     e.preventDefault();
     await removeChannel({ id }, notify);
     onHide();
@@ -50,7 +50,7 @@ const DeleteModal = (props) => {
           </Button>
           <Button
             variant="danger"
-            onClick={handleDelete(currentchannel.id)}
+            onClick={handleDelete}
           >
             {t('chat.modals.delete')}
           </Button>
