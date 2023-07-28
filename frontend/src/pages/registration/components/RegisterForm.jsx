@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { registerSchema } from '../../../utils/yup-schemas';
 import useUser from '../../../hooks/useUser';
-import routes from '../../../utils/routes';
+import routes, { appRoutes } from '../../../utils/routes';
 
 const RegisterForm = () => {
   const { t } = useTranslation();
@@ -34,7 +34,7 @@ const RegisterForm = () => {
           const userName = formik.values.nickname;
           const authorizedUser = { userName, token };
           setUser(authorizedUser);
-          navigate('/');
+          navigate(appRoutes.mainUrl);
         }
       } catch (e) {
         const errors = {};

@@ -1,4 +1,5 @@
 import { toast } from 'react-toastify';
+import { appRoutes } from './routes';
 
 const toastSettings = {
   position: 'top-right',
@@ -32,7 +33,7 @@ const onLoadingDataError = (msg, navigate) => toast.error(msg, {
   autoClose: 3000,
   onClose: () => {
     localStorage.clear();
-    return navigate('/login');
+    return navigate(appRoutes.loginUrl);
   },
 });
 

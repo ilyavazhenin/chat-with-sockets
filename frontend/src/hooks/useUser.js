@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { actions } from '../slices/userSlice';
+import { appRoutes } from '../utils/routes';
 
 const useUser = () => {
   const dispatch = useDispatch();
@@ -16,7 +17,7 @@ const useUser = () => {
 
   const logoutUser = () => {
     localStorage.clear();
-    navigate('/login');
+    navigate(appRoutes.loginUrl);
   };
 
   return ({

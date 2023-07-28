@@ -94,7 +94,7 @@ const RenameModal = (props) => {
             </Button>
             <Button
               variant="primary"
-              onClick={formik.handleSubmit}
+              type="submit"
             >
               {t('chat.modals.renameChannel')}
             </Button>

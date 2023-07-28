@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import useUser from '../../../hooks/useUser';
-import routes from '../../../utils/routes';
+import routes, { appRoutes } from '../../../utils/routes';
 
 const LoginForm = () => {
   const { t } = useTranslation();
@@ -39,7 +39,7 @@ const LoginForm = () => {
           const userName = formik.values.nickname;
           const authorizedUser = { userName, token };
           setUser(authorizedUser);
-          navigate('/');
+          navigate(appRoutes.mainUrl);
         }
       } catch (e) {
         const errors = {};
