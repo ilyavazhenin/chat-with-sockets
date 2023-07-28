@@ -41,7 +41,6 @@ const AddModal = (props) => {
 
   useEffect(() => {
     if (inputRef.current) {
-      inputRef.current.value = '';
       inputRef.current.focus();
     }
   }, [isOpened]);

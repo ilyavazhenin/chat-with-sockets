@@ -40,7 +40,6 @@ const RenameModal = (props) => {
 
   useEffect(() => {
     if (inputRef.current) {
-      inputRef.current.value = currentchannel?.name ?? '';
       inputRef.current.focus();
       inputRef.current.select();
     }
