@@ -1,4 +1,5 @@
-import { useEffect } from 'react';
+/* eslint-disable react/destructuring-assignment */
+import { useEffect, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -9,10 +10,11 @@ import { actions as channelsActions, fetchExistedChatData } from '../../slices/c
 import { actions as messagesActions } from '../../slices/messagesSlice';
 import notify from '../../utils/toast-notifier';
 import useUser from '../../hooks/useUser';
-import socketInstance from '../../utils/socket-init';
 import UnitedModal from '../../shared-components/modals';
+import SocketContext from '../../context/socket-context';
 
 const ChatMain = () => {
+  const socketInstance = useContext(SocketContext);
   const { t } = useTranslation();
   const navigateToLogin = useNavigate();
   const { currentUser } = useUser();
@@ -56,7 +58,7 @@ const ChatMain = () => {
       notify.onLoadingDataError(t('chat.toast.loadError'), navigateToLogin);
     });
     return () => socketInstance.removeAllListeners();
-  }, [activeChannel, currentUser, dispatch, navigateToLogin, t]);
+  }, [activeChannel, currentUser, dispatch, navigateToLogin, socketInstance, t]);
 
   useEffect(() => {
     try {

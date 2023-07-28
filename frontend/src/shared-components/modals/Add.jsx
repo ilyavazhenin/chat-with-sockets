@@ -1,6 +1,6 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useContext } from 'react';
 import { useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import { useFormik } from 'formik';
@@ -9,10 +9,11 @@ import { selectors } from '../../slices/channelsSlice';
 import notify from '../../utils/toast-notifier';
 import { addChannelSchema } from '../../utils/yup-schemas';
 import useSocket from '../../hooks/useSocket';
-import socketInstance from '../../utils/socket-init';
 import useUser from '../../hooks/useUser';
+import SocketContext from '../../context/socket-context';
 
 const AddModal = (props) => {
+  const socketInstance = useContext(SocketContext);
   const { t } = useTranslation();
   const { createChannel } = useSocket(socketInstance);
   const { currentUser } = useUser();

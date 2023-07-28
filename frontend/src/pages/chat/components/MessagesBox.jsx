@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
@@ -9,10 +9,11 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import { msgSelectors } from '../../../slices/messagesSlice.js';
 import notify from '../../../utils/toast-notifier.js';
 import useUser from '../../../hooks/useUser.js';
-import socket from '../../../utils/socket-init.js';
 import useSocket from '../../../hooks/useSocket.js';
+import SocketContext from '../../../context/socket-context.js';
 
 const MessagesBox = () => {
+  const socket = useContext(SocketContext);
   const { t } = useTranslation();
   const messages = useSelector(msgSelectors.selectAll);
   const activeChannel = useSelector((state) => state.channels.activeChannel);

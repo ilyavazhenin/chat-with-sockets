@@ -2,12 +2,14 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { useContext } from 'react';
 import { selectors } from '../../slices/channelsSlice';
 import notify from '../../utils/toast-notifier';
 import useSocket from '../../hooks/useSocket';
-import socketInstance from '../../utils/socket-init';
+import SocketContext from '../../context/socket-context';
 
 const DeleteModal = (props) => {
+  const socketInstance = useContext(SocketContext);
   const { t } = useTranslation();
   const { removeChannel } = useSocket(socketInstance);
   const channels = useSelector(selectors.selectAll);
