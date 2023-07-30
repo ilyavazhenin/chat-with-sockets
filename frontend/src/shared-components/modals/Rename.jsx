@@ -1,6 +1,6 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { useEffect, useRef, useContext } from 'react';
+import { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import { useFormik } from 'formik';
@@ -9,12 +9,10 @@ import { selectors } from '../../slices/channelsSlice';
 import notify from '../../utils/toast-notifier';
 import { addChannelSchema } from '../../utils/yup-schemas';
 import useSocket from '../../hooks/useSocket';
-import SocketContext from '../../context/socket-context';
 
 const RenameModal = (props) => {
-  const socketInstance = useContext(SocketContext);
   const { t } = useTranslation();
-  const { renameChannel } = useSocket(socketInstance);
+  const { renameChannel } = useSocket();
   const channels = useSelector(selectors.selectAll);
   const channelsNames = channels.map((channel) => channel.name);
   const modalState = useSelector((state) => state.modals);

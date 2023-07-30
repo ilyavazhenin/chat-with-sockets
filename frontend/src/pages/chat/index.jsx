@@ -69,7 +69,7 @@ const ChatMain = () => {
   }, [currentUser, dispatch, t]);
 
   return (
-    <div className="h-100" id="chat">
+    <div className="h-100 pt-5" id="chat">
       <ToastContainer />
       <div className="d-flex flex-column h-100">
         <div className="container h-100 my-4 overflow-hidden rounded shadow">

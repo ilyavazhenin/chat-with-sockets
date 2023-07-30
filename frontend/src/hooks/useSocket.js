@@ -1,37 +1,43 @@
+import { useContext } from 'react';
 import { i18inst } from '../i18n';
+import SocketContext from '../context/socket-context';
 
-const useSocket = (socketInstance) => ({
-  emitMessage: async (payload, notifyInst) => socketInstance.emit(
-    'newMessage',
-    payload,
-    (respData) => {
-      if (respData.status !== 'ok') { notifyInst.onUnableToEmitEvent(i18inst.t('chat.toast.cantSendMsg')); }
-    },
-  ),
+const useSocket = () => {
+  const socketInstance = useContext(SocketContext);
 
-  createChannel: async (payload, notifyInst) => socketInstance.emit(
-    'newChannel',
-    payload,
-    (respData) => {
-      if (respData.status !== 'ok') notifyInst.onUnableToEmitEvent(i18inst.t('chat.toast.cantCreateChannel'));
-    },
-  ),
+  return ({
+    emitMessage: async (payload, notifyInst) => socketInstance.emit(
+      'newMessage',
+      payload,
+      (respData) => {
+        if (respData.status !== 'ok') { notifyInst.onUnableToEmitEvent(i18inst.t('chat.toast.cantSendMsg')); }
+      },
+    ),
 
-  removeChannel: async (payload, notifyInst) => socketInstance.emit(
-    'removeChannel',
-    payload,
-    (respData) => {
-      if (respData.status !== 'ok') notifyInst.onUnableToEmitEvent(i18inst.t('chat.toast.cantDeleteChannel'));
-    },
-  ),
+    createChannel: async (payload, notifyInst) => socketInstance.emit(
+      'newChannel',
+      payload,
+      (respData) => {
+        if (respData.status !== 'ok') notifyInst.onUnableToEmitEvent(i18inst.t('chat.toast.cantCreateChannel'));
+      },
+    ),
 
-  renameChannel: async (payload, notifyInst) => socketInstance.emit(
-    'renameChannel',
-    payload,
-    (respData) => {
-      if (respData.status !== 'ok') notifyInst.onUnableToEmitEvent(i18inst.t('chat.toast.cantRenameChannel'));
-    },
-  ),
-});
+    removeChannel: async (payload, notifyInst) => socketInstance.emit(
+      'removeChannel',
+      payload,
+      (respData) => {
+        if (respData.status !== 'ok') notifyInst.onUnableToEmitEvent(i18inst.t('chat.toast.cantDeleteChannel'));
+      },
+    ),
+
+    renameChannel: async (payload, notifyInst) => socketInstance.emit(
+      'renameChannel',
+      payload,
+      (respData) => {
+        if (respData.status !== 'ok') notifyInst.onUnableToEmitEvent(i18inst.t('chat.toast.cantRenameChannel'));
+      },
+    ),
+  });
+};
 
 export default useSocket;

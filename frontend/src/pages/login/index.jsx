@@ -11,9 +11,9 @@ const LoginCard = () => {
         <div className="col">
           <Card>
             <Card.Body>
-              <div className="row">
+              <div className="row align-items-center">
                 <div className="col">
-                  <Card.Img variant="top" src="assets/chat-box.png" />
+                  <Card.Img variant="top" src="assets/chat-box.png" className="login-img" />
                 </div>
                 <div className="col w-100">
                   <Card.Title>

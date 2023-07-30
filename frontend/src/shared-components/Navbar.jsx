@@ -11,7 +11,7 @@ const Navbar = () => {
   const { pathname } = currentLocation;
 
   return (
-    <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
+    <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white position-fixed w-100">
       <div className="container">
         <a className="navbar-brand" href="/">{t('general.appNameLogo')}</a>
         {

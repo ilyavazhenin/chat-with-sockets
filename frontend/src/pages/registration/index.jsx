@@ -13,7 +13,7 @@ const RegisterCard = () => {
             <Card.Body>
               <div className="row align-items-center">
                 <div className="col">
-                  <Card.Img variant="top" src="assets/sign-up.svg" />
+                  <Card.Img variant="top" src="assets/sign-up.svg" className="login-img" />
                 </div>
                 <div className="col w-100">
                   <Card.Title>

@@ -2,6 +2,7 @@ import { Provider } from 'react-redux';
 import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
 import { initReactI18next } from 'react-i18next';
 import { io } from 'socket.io-client';
+import filter from 'leo-profanity';
 import store from './slices/index';
 import resources, { i18inst } from './i18n';
 import App from './App';
@@ -11,7 +12,7 @@ import SocketContext from './context/socket-context';
 const init = async () => {
   const rollbarConfig = {
     accessToken: process.env.REACT_APP_ROLLBAR_TOKEN,
-    environment: 'prod',
+    environment: 'production',
   };
 
   await i18inst
@@ -32,6 +33,9 @@ const init = async () => {
       },
     },
   });
+
+  filter.add(filter.getDictionary('en'));
+  filter.add(filter.getDictionary('ru'));
 
   return (
     <RollbarProvider config={rollbarConfig}>
